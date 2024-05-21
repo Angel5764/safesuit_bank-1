@@ -1,4 +1,4 @@
-import 'package:safesuit_bank/core/domain/entities/pagartelcel.dart';
+// import 'package:safesuit_bank/core/domain/entities/pagartelcel.dart';
 
 class pagartelcelModel{
   final String NoTelcel;

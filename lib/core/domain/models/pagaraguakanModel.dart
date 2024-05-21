@@ -1,10 +1,10 @@
-import 'package:safesuit_bank/core/domain/entities/pagaraguakan.dart';
+// import 'package:safesuit_bank/core/domain/entities/pagaraguakan.dart';
 
-class pagarcfeModel{
+class pagaraguakanModel{
   final String NIA;
   final double Importe;
 
-  pagarcfeModel ({required this.NIA,
+  pagaraguakanModel ({required this.NIA,
     required this.Importe
   });
 }

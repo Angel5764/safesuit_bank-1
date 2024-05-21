@@ -1,4 +1,6 @@
-import 'package:safesuit_bank/core/domain/entities/user.dart';
+import 'dart:ffi';
+
+// import 'package:safesuit_bank/core/domain/entities/user.dart';
 
 class UserModel {
 
@@ -7,15 +9,14 @@ class UserModel {
   final String telefono;
   final String email;
   final String password;
+  final Float money;
 
   UserModel ({required this.name,
     required this.lastName,
     required this.telefono,
     required this.email,
-    required this.password
+    required this.password,
+    required this.money
   });
 
-  factory UserModel.fromEntity(User user){
-    return UserModel(name: user.name, lastName: user.lastName, telefono: user.telefono, email: user.email, password: user.password);
-  }
 }

@@ -1,4 +1,4 @@
-import 'package:safesuit_bank/core/domain/entities/pagarcfe.dart';
+// import 'package:safesuit_bank/core/domain/entities/pagarcfe.dart';
 
 class pagarcfeModel{
   final String Numservices;

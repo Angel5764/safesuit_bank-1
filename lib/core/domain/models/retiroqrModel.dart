@@ -1,4 +1,4 @@
-import 'package:safesuit_bank/core/domain/entities/retiroqr.dart';
+// import 'package:safesuit_bank/core/domain/entities/retiroqr.dart';
 
 class RetiroqrModel {
 
@@ -11,7 +11,5 @@ class RetiroqrModel {
   required this.saldoDisponible,
   });
 
-  factory RetiroqrModel.fromEntity(RetiroEntity retiroqrentity){
-    return RetiroqrModel(username: retiroqrentity.username, cantRetirar: retiroqrentity.cantRetirar, saldoDisponible: retiroqrentity.saldoDisponible);
-  }
+  
 }

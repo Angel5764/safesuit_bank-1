@@ -1,4 +1,4 @@
-import 'package:safesuit_bank/core/domain/entities/sidebar.dart';
+// import 'package:safesuit_bank/core/domain/entities/sidebar.dart';
 
 class SidebarModel {
 
@@ -9,7 +9,5 @@ class SidebarModel {
   required this.email,
   });
 
-  factory SidebarModel.fromEntity(SidebarEntity sidebarentity){
-    return SidebarModel(username: sidebarentity.username, email: sidebarentity.email);
-  }
+  
 }

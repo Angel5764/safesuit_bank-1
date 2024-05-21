@@ -1,4 +1,4 @@
-import 'package:safesuit_bank/core/domain/entities/card.dart';
+// import 'package:safesuit_bank/core/domain/entities/card.dart';
 
 class CardModel{
   final String number;
@@ -14,7 +14,4 @@ class CardModel{
     required this.bankName,
   });
 
-  factory CardModel.fromEntity(CardEntity card){
-    return CardModel(number: card.number, ccv: card.ccv, expireDate: card.expireDate, owner: card.owner, bankName: card.bankName);
-  }
 }

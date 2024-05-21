@@ -1,5 +1,5 @@
 import 'dart:ffi';
-import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
+// import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
 
 class TransactionModel{
   final String username;
@@ -14,7 +14,4 @@ class TransactionModel{
     required this.hora
   });
 
-  factory TransactionModel.fromEntity(TransactionEntity transaction){
-    return TransactionModel(username: transaction.username, monto: transaction.monto, fecha: transaction.fecha, hora: transaction.hora);
-  }
 }

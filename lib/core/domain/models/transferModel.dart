@@ -1,6 +1,6 @@
 import 'dart:ffi';
 
-import 'package:safesuit_bank/core/domain/entities/transfer.dart';
+// import 'package:safesuit_bank/core/domain/entities/transfer.dart';
 
 class TransferModel{
   final String numbercardtransfer;
@@ -15,7 +15,5 @@ class TransferModel{
     required this.amountransfer
   });
 
-  factory TransferModel.fromEntity(TransferEntity transfer){
-    return TransferModel(numbercardtransfer: transfer.numbercardtransfer, ownertransfer: transfer.ownertransfer, bankNametransfer: transfer.bankNametransfer, amountransfer: transfer.amountransfer);
-  }
+  
 }
