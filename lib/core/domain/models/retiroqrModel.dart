@@ -1,5 +1,7 @@
-// import 'package:safesuit_bank/core/domain/entities/retiroqr.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'retiroqrModel.g.dart';
 
+@JsonSerializable()
 class RetiroqrModel {
 
   final String username;
@@ -11,5 +13,6 @@ class RetiroqrModel {
   required this.saldoDisponible,
   });
 
-  
+  factory RetiroqrModel.fromJson(Map<String, dynamic> json) => _$RetiroqrModelFromJson(json);
+  Map<String, dynamic> toJson() => _$RetiroqrModelTojson(this);
 }
