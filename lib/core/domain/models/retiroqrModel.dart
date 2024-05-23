@@ -13,6 +13,6 @@ class RetiroqrModel {
   required this.saldoDisponible,
   });
 
-factory RetiroqrModel.fromJson(Map<String, dynamic> json) => _$RetiroqrModelFromJson(json);
-Map <String, dynamic> toJson() => _$RetiroqrModelToJson(this);
+  factory RetiroqrModel.fromJson(Map<String, dynamic> json) => _$RetiroqrModelFromJson(json);
+  Map<String, dynamic> toJson() => _$RetiroqrModelToJson(this);
 }
