@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class User {
   /*atributos
@@ -13,7 +12,7 @@ class User {
   final String telefono;
   final String email;
   final String password;
-  final Float money;
+  final double money;
 
   User ({required this.name,
     required this.lastName,

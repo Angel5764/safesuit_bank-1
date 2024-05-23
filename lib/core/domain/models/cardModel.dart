@@ -1,4 +1,7 @@
 // import 'package:safesuit_bank/core/domain/entities/card.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'cardModel.g.dart';
+@JsonSerializable()
 
 class CardModel{
   final String number;
@@ -14,4 +17,6 @@ class CardModel{
     required this.bankName,
   });
 
+factory CardModel.fromJson(Map<String, dynamic> json) => _$CardModelFromJson(json);
+Map <String, dynamic> toJson() => _$CardModelToJson(this);
 }
