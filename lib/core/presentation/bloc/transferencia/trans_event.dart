@@ -7,7 +7,9 @@ abstract class TransEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadTransDataEvent extends TransEvent {}
+class LoadTransDataEvent extends TransEvent {
+  get amountransfer => null;
+}
 
 class CantTransferirChanged extends TransEvent {
   final double amountransfer;
