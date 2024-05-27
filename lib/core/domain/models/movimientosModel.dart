@@ -1,20 +1,23 @@
 import 'dart:ffi';
-import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
+// import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'movimientosModel.g.dart';
 
-class TransactionModel{
+@JsonSerializable()
+class MovimientosModel{
   final String username;
-  final Float monto;
+  final double monto;
   final DateTime fecha;
   final DateTime hora;
 
-  TransactionModel ({
+  MovimientosModel ({
     required this.username,
     required this.monto,
     required this.fecha,
     required this.hora
   });
 
-  factory TransactionModel.fromEntity(TransactionEntity transaction){
-    return TransactionModel(username: transaction.username, monto: transaction.monto, fecha: transaction.fecha, hora: transaction.hora);
-  }
+  factory MovimientosModel.fromJson(Map<String, dynamic> json) => _$MovimientosModelFromJson(json);
+  Map<String, dynamic> toJson() => _$MovimientosModelToJson(this);
+
 }

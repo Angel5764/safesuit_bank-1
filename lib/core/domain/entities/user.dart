@@ -1,3 +1,4 @@
+
 class User {
   /*atributos
     name
@@ -11,11 +12,13 @@ class User {
   final String telefono;
   final String email;
   final String password;
+  final double money;
 
   User ({required this.name,
     required this.lastName,
     required this.telefono,
     required this.email,
-    required this.password
+    required this.password,
+    required this.money
   });
 }

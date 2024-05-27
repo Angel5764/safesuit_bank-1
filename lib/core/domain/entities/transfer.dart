@@ -1,10 +1,9 @@
-import 'dart:ffi';
 
 class TransferEntity{
   final String numbercardtransfer;
   final String ownertransfer;
   final String bankNametransfer;
-  final Float amountransfer;
+  final double amountransfer;
 
   TransferEntity ({
     required this.numbercardtransfer,
