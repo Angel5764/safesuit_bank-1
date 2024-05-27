@@ -408,8 +408,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.1"
-<<<<<<< HEAD
-=======
   json_annotation:
     dependency: "direct main"
     description:
@@ -426,7 +424,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.8.0"
->>>>>>> ddf8533f1edafa261697c3be64975504dc06f26a
   lints:
     dependency: transitive
     description:
@@ -507,8 +504,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
-<<<<<<< HEAD
-=======
   mime:
     dependency: transitive
     description:
@@ -533,7 +528,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
->>>>>>> ddf8533f1edafa261697c3be64975504dc06f26a
   path:
     dependency: transitive
     description:
@@ -747,16 +741,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-<<<<<<< HEAD
-  web:
-    dependency: transitive
-    description:
-      name: web
-      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
-=======
   watcher:
     dependency: transitive
     description:
@@ -781,7 +765,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
->>>>>>> ddf8533f1edafa261697c3be64975504dc06f26a
   xdg_directories:
     dependency: transitive
     description:
