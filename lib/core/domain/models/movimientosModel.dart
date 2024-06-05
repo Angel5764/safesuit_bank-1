@@ -1,4 +1,3 @@
-import 'dart:ffi';
 // import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'movimientosModel.g.dart';
