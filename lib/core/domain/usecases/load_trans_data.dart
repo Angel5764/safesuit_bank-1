@@ -12,15 +12,34 @@ class LoadTransData {
     if (transData.numbercardtransfer.isEmpty) {
       throw Exception("El numero de tarjeta no puede estar vacío");
     }
+    if (transData.ownertransfer.isEmpty || transData.bankNametransfer.isEmpty) {
+      throw Exception("Todos los campos son obligatorios");
+    }
+    if (transData.bankNametransfer.isEmpty) {
+    throw Exception("El nombre del banco no puede estar vacío");
+    }
+    if (transData.bankNametransfer.length < 3) {
+      throw Exception("El nombre del banco debe tener al menos 3 caracteres");
+    }
     if (transData.numbercardtransfer.length < 16) {
       throw Exception("El numero de tarjeta debe tener al menos 16 caracteres");
     }
     if (!_esCarateres(transData.ownertransfer)) {
       throw Exception("El nombre de usuario solo puede contener letras");
     }
+    if (!_esNumeroDeTarjeta(transData.numbercardtransfer)) {
+      throw Exception("El número de tarjeta solo puede contener dígitos");
+    }
     if (transData.amountransfer < 0) {
       throw Exception("La cantidad a transferir debe ser mayor a 0");
     }
+    if (transData.amountransfer <= 0) {
+      throw Exception("La cantidad a transferir debe ser mayor a 0");
+    }
+    if (transData.amountransfer > 10000) {
+      throw Exception("La cantidad a transferir no puede exceder los 10,000");
+    }
+
     if (!_esDouble(transData.amountransfer)) {
       throw Exception("La cantidad a transferir debe ser un número válido con dos decimales");
     }
@@ -35,7 +54,10 @@ class LoadTransData {
     final alphaRegex = RegExp(r'^[a-zA-Z]+$');
     return alphaRegex.hasMatch(str);
   }
-
+  bool _esNumeroDeTarjeta(String str) {
+    final cardNumberRegex = RegExp(r'^\d{16}$');
+    return cardNumberRegex.hasMatch(str);
+  }
   bool _esDouble(double value) {
     final decimalRegex = RegExp(r'^\d+(\.\d{1,2})?$');
     return decimalRegex.hasMatch(value.toString());
