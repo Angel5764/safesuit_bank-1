@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:safesuit_bank/core/presentation/screers/QRCodeScreen.dart';
-import 'package:safesuit_bank/core/presentation/screers/home.dart';
 
 
 class RetirarQR extends StatelessWidget {
