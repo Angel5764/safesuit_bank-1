@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:safesuit_bank/core/presentation/screers/home.dart';
+import 'package:safesuit_bank/core/presentation/screers/UserRegistration.dart';
 
 
 
@@ -129,11 +130,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundColor: MaterialStateProperty.all(Colors.blueGrey)
                 ),
               ),
-              const Text("\nO"),
-              
+              const Text("\nO"),              
               IconButton(
                 onPressed: () => {_auth(), },
                 icon: const Icon(Icons.fingerprint, size: 50,)
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserRegistrationView()));
+                },
+                child: Text(
+                  "registrarse",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey)
+                ),
               ),
             ],
           ),
