@@ -37,8 +37,6 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
     });
 
     on<SubmitUserRegister>((event, emit) {
-      // Aquí podrías agregar lógica para enviar el formulario de registro de usuario
-      // como hacer una llamada a una API o guardar los datos localmente
     });
   }
 }
