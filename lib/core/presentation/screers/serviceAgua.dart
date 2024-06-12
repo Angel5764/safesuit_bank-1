@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:safesuit_bank/core/presentation/screers/paymentAgua.dart';
+import '../bloc/pagos/aguakan/pagaraguakan_bloc.dart';
+import '../bloc/pagos/aguakan/pagaraguakan_event.dart';
+import '../bloc/pagos/aguakan/pagaraguakan_state.dart' as aguastate;
 
 class TransAgua extends StatelessWidget {
   @override
@@ -40,7 +44,14 @@ class TransAgua extends StatelessWidget {
                 SizedBox(
                   width: 300,
                   height: 50,
-                  child: TextField(
+                  child: BlocBuilder<PagaraguakanBloc,
+                      aguastate.PagaraguakanState>(
+                    builder: (context, state) {
+                      TextEditingController NIA =
+                          TextEditingController(text: state.NIA);
+                      TextEditingController Importe =
+                          TextEditingController(text: state.Importe.toString());   
+                    },
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Color.fromARGB(255, 205, 205, 205),
@@ -50,7 +61,7 @@ class TransAgua extends StatelessWidget {
                         borderSide: BorderSide.none,
                       ),
                       contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                    ),
+                    ), 
                   ),
                 ),
                 SizedBox(height: 25.0),
