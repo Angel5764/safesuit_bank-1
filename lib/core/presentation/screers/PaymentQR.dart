@@ -7,11 +7,13 @@ import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_event.dar
 import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_state.dart';
 
 class RetirarQR extends StatelessWidget {
+  final TextEditingController _cantRetirarController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RetiroBloc(
-        context.read<Usz>(), // Añadiendo el argumento necesario
+        context.read<LoadRetiroData>(),
       )..add(LoadRetiroDataEvent()),
       child: Scaffold(
         appBar: AppBar(
@@ -25,6 +27,12 @@ class RetirarQR extends StatelessWidget {
         ),
         body: BlocBuilder<RetiroBloc, RetiroState>(
           builder: (context, state) {
+            // Verificamos que el estado venga con datos
+            print(state.toString());
+
+            // Inicializamos el controlador con el valor del estado
+            _cantRetirarController.text = state.cantRetirar.toString();
+
             return SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -35,7 +43,7 @@ class RetirarQR extends StatelessWidget {
                     BankCardWidget(
                       userName: state.username,
                       balance: state.saldoDisponible,
-                      cantRetirar: state.cantRetirar,
+                      cantRetirarController: _cantRetirarController,
                       onCantRetirarChanged: (value) {
                         context.read<RetiroBloc>().add(CantRetirarChanged(double.tryParse(value) ?? 0.0));
                       },
@@ -105,19 +113,16 @@ class RetirarQR extends StatelessWidget {
 class BankCardWidget extends StatelessWidget {
   final String userName;
   final double balance;
-  final double cantRetirar;
+  final TextEditingController cantRetirarController;
   final ValueChanged<String> onCantRetirarChanged;
-  final TextEditingController _controller = TextEditingController();
 
   BankCardWidget({
     Key? key,
     required this.userName,
     required this.balance,
-    required this.cantRetirar,
+    required this.cantRetirarController,
     required this.onCantRetirarChanged,
-  }) : super(key: key) {
-    _controller.text = cantRetirar.toString();
-  }
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +178,7 @@ class BankCardWidget extends StatelessWidget {
                 ),
               ),
               TextField(
-                controller: _controller,
+                controller: cantRetirarController,
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(

@@ -295,7 +295,7 @@ class HomeView extends StatelessWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => TransAgua()),
+                            MaterialPageRoute(builder: (context) => TransTelcel()),//Aqui va el TransAgua
                           );
                           // Acción para el botón de Aguakan
                         },
