@@ -1,9 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:safesuit_bank/core/presentation/screers/home.dart';
-import 'package:safesuit_bank/core/presentation/screers/UserRegistration.dart';
-import 'package:provider/provider.dart';
-
+import 'package:safesuit_bank/core/presentation/screens/home.dart';
+import 'package:safesuit_bank/core/presentation/screens/UserRegistration.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Safe Suit Bank',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-      ),
+      theme: ThemeData(),
       home: const MyHomePage(title: ''),
     );
   }
@@ -41,27 +39,35 @@ class _MyHomePageState extends State<MyHomePage> {
     bool authenticated = false;
     try {
       authenticated = await _localAuthentication.authenticate(
-          localizedReason: "Autenticate para acceder",
-          options: const AuthenticationOptions(stickyAuth: true, useErrorDialogs: true));
+        localizedReason: "Autenticate para acceder",
+        options: const AuthenticationOptions(
+            stickyAuth: true, useErrorDialogs: true),
+      );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     if (authenticated) {
       Navigator.pushReplacement<void, void>(
-          context,
-          MaterialPageRoute<void>(
-            builder: ((context) => HomeView())));
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute<void>(
+          builder: ((context) => const HomeView()),
+        ),
+      );
     } else {
-      print("fallo auth");
+      if (kDebugMode) {
+        print("fallo auth");
+      }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     // Las variables _isChecked, _phoneNumber y _password deberían definirse fuera del método build para evitar redeclaraciones en cada reconstrucción. Aquí se mantienen para coincidir con la estructura del código proporcionado.
-    String _phoneNumber = "";
-    String _password = "";
+    String phoneNumber = "";
+    String password = "";
 
     return Scaffold(
       // appBar: AppBar(
@@ -77,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
-              color: Colors.black, 
+              color: Colors.black,
               width: 2.0,
             ),
             boxShadow: [
@@ -85,24 +91,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: Column(
             children: [
-              Image(
+              const Image(
                 image: AssetImage("assets/images/Logo.jpg"),
                 height: 200,
                 fit: BoxFit.contain,
               ),
               TextField(
-                decoration: InputDecoration(hintText: "Numero de telefono"),
-                controller: TextEditingController(text: _phoneNumber)
+                decoration:
+                    const InputDecoration(hintText: "Numero de telefono"),
+                controller: TextEditingController(text: phoneNumber),
               ),
               TextField(
-                decoration: InputDecoration(hintText: "Contraseña"),
-                controller: TextEditingController(text: _password)
+                decoration: const InputDecoration(hintText: "Contraseña"),
+                controller: TextEditingController(text: password),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -115,36 +122,51 @@ class _MyHomePageState extends State<MyHomePage> {
                     checkColor: Colors.black,
                     fillColor: MaterialStateProperty.all(Colors.white),
                   ),
-                  Text("Mantener sesion activa"),
+                  const Text("Mantener sesion activa"),
                 ],
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeView()));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeView(),
+                    ),
+                  );
                 },
-                child: Text(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                ),
+                child: const Text(
                   "Inicia sesión",
                   style: TextStyle(color: Colors.white),
                 ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey)
-                ),
               ),
-              const Text("\nO"),              
+              const Text("\nO"),
               IconButton(
-                onPressed: () => {_auth(), },
-                icon: const Icon(Icons.fingerprint, size: 50,)
+                onPressed: () => {
+                  _auth(),
+                },
+                icon: const Icon(
+                  Icons.fingerprint,
+                  size: 50,
+                ),
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserRegistrationView()));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserRegistrationView(),
+                    ),
+                  );
                 },
-                child: Text(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                ),
+                child: const Text(
                   "registrarse",
                   style: TextStyle(color: Colors.white),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey)
                 ),
               ),
             ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:safesuit_bank/core/presentation/screers/home.dart';
-import 'package:safesuit_bank/core/presentation/screers/TransMonto.dart';
+import 'package:safesuit_bank/core/presentation/screens/home.dart';
+import 'package:safesuit_bank/core/presentation/screens/TransMonto.dart';
 
 class TransUser extends StatelessWidget {
   const TransUser({super.key});

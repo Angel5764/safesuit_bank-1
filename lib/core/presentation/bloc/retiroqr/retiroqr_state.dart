@@ -9,10 +9,19 @@ class RetiroState extends Equatable {
 
   const RetiroState({
     this.username = '',
-    this.cantRetirar = 0.0,
-    this.saldoDisponible = 0.0,
+    this.cantRetirar = 0,
+    this.saldoDisponible = 0,
     this.isValid = false,
   });
+
+  factory RetiroState.fromModel(RetiroqrModel model) {
+    return RetiroState(
+      username: model.username,
+      cantRetirar: model.cantRetirar,
+      saldoDisponible: model.saldoDisponible,
+      isValid: true, // Asumiendo que el modelo es válido al cargar
+    );
+  }
 
   RetiroState copyWith({
     String? username,
@@ -29,14 +38,10 @@ class RetiroState extends Equatable {
   }
 
   @override
-  List<Object> get props => [username, cantRetirar, saldoDisponible, isValid];
-
-  factory RetiroState.fromModel(RetiroqrModel model) {
-    return RetiroState(
-      username: model.username,
-      cantRetirar: model.cantRetirar,
-      saldoDisponible: model.saldoDisponible,
-      isValid: true, // Asumiendo que el modelo es válido al cargar
-    );
-  }
+  List<Object> get props => [
+        //username,
+        cantRetirar,
+        //saldoDisponible,
+        isValid,
+      ];
 }
