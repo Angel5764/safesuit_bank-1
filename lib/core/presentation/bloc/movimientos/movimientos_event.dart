@@ -20,3 +20,39 @@ class CantMovimientosChanged extends MovimientosEvent {
   @override
   List<Object> get props => [username, monto, fecha, hora];
 }
+
+class MovimientosUsernameChanged extends MovimientosEvent {
+  final String username;
+
+  const MovimientosUsernameChanged(this.username);
+
+  @override
+  List<Object> get props => [username];
+}
+
+class MovimientosMontoChanged extends MovimientosEvent {
+  final double monto;
+
+  const MovimientosMontoChanged(this.monto);
+
+  @override
+  List<Object> get props => [monto];
+}
+
+class MovimientosFechaChanged extends MovimientosEvent {
+  final DateTime fecha;
+
+  const MovimientosFechaChanged(this.fecha);
+
+  @override
+  List<Object> get props => [fecha];
+}
+
+class MovimientosHoraChanged extends MovimientosEvent {
+  final DateTime hora;
+
+  const MovimientosHoraChanged(this.hora);
+
+  @override
+  List<Object> get props => [hora];
+}

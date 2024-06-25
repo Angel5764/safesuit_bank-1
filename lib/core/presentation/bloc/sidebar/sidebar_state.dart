@@ -13,7 +13,6 @@ class SidebarState extends Equatable {
   SidebarState copyWith({
     String? username,
     String? email,
-
   }) {
     return SidebarState(
       username: username ?? this.username,
@@ -27,7 +26,7 @@ class SidebarState extends Equatable {
   factory SidebarState.fromModel(SidebarModel model) {
     return SidebarState(
       username: model.username,
-      email: model.email
+      email: model.email,
     );
   }
 }
