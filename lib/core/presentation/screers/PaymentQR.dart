@@ -1,102 +1,127 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:safesuit_bank/core/domain/usecases/load_retiroqr_data.dart';
 import 'package:safesuit_bank/core/presentation/screers/QRCodeScreen.dart';
-
+import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_bloc.dart';
+import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_event.dart';
+import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_state.dart';
 
 class RetirarQR extends StatelessWidget {
+  final TextEditingController _cantRetirarController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final String userName = 'Angel Zea';
-    final double balance = 100000.00;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Retirar dinero con QR',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 25, color: Color.fromARGB(255, 242, 244, 250)),
+    return BlocProvider(
+      create: (context) => RetiroBloc(
+        context.read<LoadRetiroData>(),
+      )..add(LoadRetiroDataEvent()),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Retirar dinero con QR',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 25, color: Color.fromARGB(255, 242, 244, 250)),
+          ),
+          backgroundColor: Color.fromARGB(255, 66, 79, 120),
         ),
-        backgroundColor: Color.fromARGB(255, 66, 79, 120),
-      ),
-      body: SingleChildScrollView( // Esto permite el desplazamiento cuando el contenido es más grande que la pantalla.
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 20), // Un poco de espacio en la parte superior
-              BankCardWidget(
-                userName: userName, // Pasas el userName aquí.
-                balance: balance, // Y el balance aquí.
-              ),
-              SizedBox(height: 20),
-              Center(
+        body: BlocBuilder<RetiroBloc, RetiroState>(
+          builder: (context, state) {
+            // Verificamos que el estado venga con datos
+            print(state.toString());
+
+            // Inicializamos el controlador con el valor del estado
+            _cantRetirarController.text = state.cantRetirar.toString();
+
+            return SingleChildScrollView(
+              child: Center(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'Genera tu código QR para retirar\n dinero sin tu tarjeta:',
-                      textAlign: TextAlign.center, // Asegura el centrado del texto en su línea
-                      style: TextStyle(
-                        color: Colors.lightBlue,
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    BankCardWidget(
+                      userName: state.username,
+                      balance: state.saldoDisponible,
+                      cantRetirarController: _cantRetirarController,
+                      onCantRetirarChanged: (value) {
+                        context.read<RetiroBloc>().add(CantRetirarChanged(double.tryParse(value) ?? 0.0));
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Genera tu código QR para retirar\n dinero sin tu tarjeta:',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.lightBlue,
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    SizedBox(height: 20),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => QRCodeScreen()),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.qr_code,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Generar QR',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
-              SizedBox(height: 20), // Espacio entre el widget de la tarjeta y el botón
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => QRCodeScreen()),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.all(15), // Esto crea el espacio alrededor del icono y el texto
-                  decoration: BoxDecoration(
-                    color: Colors.blue, // Color de fondo
-                    shape: BoxShape.circle, // Esto hará que sea un círculo
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min, // Mantener el contenido al mínimo
-                    mainAxisAlignment: MainAxisAlignment.center, // Centrar el contenido
-                    children: <Widget>[
-                      Icon(
-                        Icons.qr_code, // Icono de QR
-                        size: 35, // Tamaño del icono más grande
-                        color: Colors.white,
-                      ),
-                      Text(
-                        'Generar QR', // Texto sobre el icono
-                        style: TextStyle(
-                          fontSize: 10, // Tamaño de fuente ajustado para que quepa
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 20), // Espacio al final del botón
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 }
 
-
 class BankCardWidget extends StatelessWidget {
   final String userName;
   final double balance;
+  final TextEditingController cantRetirarController;
+  final ValueChanged<String> onCantRetirarChanged;
 
-  const BankCardWidget({
+  BankCardWidget({
     Key? key,
-    required this.userName, 
-    required this.balance, 
+    required this.userName,
+    required this.balance,
+    required this.cantRetirarController,
+    required this.onCantRetirarChanged,
   }) : super(key: key);
 
   @override
@@ -153,6 +178,7 @@ class BankCardWidget extends StatelessWidget {
                 ),
               ),
               TextField(
+                controller: cantRetirarController,
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
@@ -165,6 +191,7 @@ class BankCardWidget extends StatelessWidget {
                     borderSide: BorderSide(color: Colors.white),
                   ),
                 ),
+                onChanged: onCantRetirarChanged,
               ),
               SizedBox(height: 10),
               Text(

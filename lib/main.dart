@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:safesuit_bank/core/presentation/screers/home.dart';
 import 'package:safesuit_bank/core/presentation/screers/UserRegistration.dart';
-
+import 'package:provider/provider.dart';
 
 
 void main() {
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           padding: const EdgeInsets.all(11.0),
           width: 480,
-          height: 550,
+          height: 566,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
