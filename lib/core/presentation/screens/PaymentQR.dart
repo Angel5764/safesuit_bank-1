@@ -27,9 +27,13 @@ class _RetirarQRState extends State<RetirarQR> {
           if (kDebugMode) {
             print(state.toString());
           }
+          TextEditingController userNameController = TextEditingController(
+            text: state.username.toString(),
+          );
           TextEditingController cantRetirarController = TextEditingController(
             text: state.cantRetirar.toString(),
           );
+          
           return Scaffold(
             appBar: AppBar(
               title: const Text(
@@ -47,8 +51,8 @@ class _RetirarQRState extends State<RetirarQR> {
                 children: [
                   const SizedBox(height: 20),
                   BankCardWidget(
-                    userName: "User Name", // Placeholder value
-                    balance: 1000.0, // Placeholder value
+                    userNameController: userNameController, // Placeholder value
+                    balance: 10.0, // Placeholder value
                     cantRetirarController: cantRetirarController,
                     onCantRetirarChanged: (value) {
                       // Handle value change
@@ -74,22 +78,11 @@ class _RetirarQRState extends State<RetirarQR> {
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
-                      if (state.isValid) {
-                        context.read<RetiroBloc>().add(QrSubmitted());
-                        Navigator.of(context).push(
+                      Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => const QRCodeScreen(),
                           ),
                         );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Por favor complete todos los campos',
-                            ),
-                          ),
-                        );
-                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(15),
@@ -129,14 +122,14 @@ class _RetirarQRState extends State<RetirarQR> {
 }
 
 class BankCardWidget extends StatelessWidget {
-  final String userName;
+  final TextEditingController userNameController;
   final double balance;
   final TextEditingController cantRetirarController;
   final ValueChanged<String> onCantRetirarChanged;
 
   const BankCardWidget({
     super.key,
-    required this.userName,
+    required this.userNameController,
     required this.balance,
     required this.cantRetirarController,
     required this.onCantRetirarChanged,
@@ -180,7 +173,7 @@ class BankCardWidget extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 10),
               Text(
-                userName,
+                userNameController.text,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,

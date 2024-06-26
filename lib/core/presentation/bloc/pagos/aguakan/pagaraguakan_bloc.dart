@@ -1,21 +1,25 @@
+// pagaraguakan_bloc.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:safesuit_bank/core/domain/usecases/load_pagaraguakan_repository.dart'
-    as usecase;
+import 'package:safesuit_bank/core/domain/usecases/load_pagaraguakan_repository.dart' as usecase;
 import 'pagaraguakan_event.dart';
 import 'pagaraguakan_state.dart';
 
 class PagaraguakanBloc extends Bloc<PagaraguakanEvent, PagaraguakanState> {
-  final usecase.LoadPagaraguakanData loadpagaraguakanData;
+  final usecase.LoadPagaraguakanData loadPagaraguakanData;
 
-  PagaraguakanBloc(this.loadpagaraguakanData) : super(const PagaraguakanState()) {
+  PagaraguakanBloc(this.loadPagaraguakanData) : super(const PagaraguakanState()) {
     on<LoadPagaraguakanDataEvent>((event, emit) async {
-      final PagaraguakanData = await loadpagaraguakanData();
-      emit(PagaraguakanState.fromModel(PagaraguakanData));
+      try {
+        final pagaraguakanData = await loadPagaraguakanData();
+        emit(PagaraguakanState.fromModel(pagaraguakanData));
+      } catch (error) {
+        emit(state.copyWith(errorMessage: error.toString()));
+      }
     });
 
-    on<LoadPagaraguakanDataEvent>((event, emit) {
+    on<ImporteChanged>((event, emit) {
       emit(state.copyWith(
-        Importe: event.importe,
+        Importe: event.importe, errorMessage: '',
       ));
     });
   }

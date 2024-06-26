@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:safesuit_bank/core/presentation/screens/TransSelecionUser.dart';
 import 'package:safesuit_bank/core/presentation/screens/movimientos.dart';
+import 'package:safesuit_bank/core/presentation/screens/serviceAgua.dart';
 import 'package:safesuit_bank/core/presentation/screens/serviceCFE.dart';
 
 import 'package:safesuit_bank/core/presentation/screens/serviceTelcel.dart';
@@ -310,7 +311,7 @@ class HomeView extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    TransTelcel()), //Aqui va el TransAgua
+                                    TransAgua()), //Aqui va el TransAgua
                           );
                           // Acción para el botón de Aguakan
                         },
