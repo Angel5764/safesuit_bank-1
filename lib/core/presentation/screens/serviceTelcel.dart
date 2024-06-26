@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safesuit_bank/core/presentation/screers/paymentTelcel.dart';
+import 'package:safesuit_bank/core/presentation/screens/paymentTelcel.dart';
 
 class TransTelcel extends StatelessWidget {
   @override

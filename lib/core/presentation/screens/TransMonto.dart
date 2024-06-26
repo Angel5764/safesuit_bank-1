@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:safesuit_bank/core/presentation/screers/DatosTrans.dart';
-import 'package:safesuit_bank/core/presentation/screers/TransSelecionUser.dart';
+import 'package:safesuit_bank/core/presentation/screens/DatosTrans.dart';
+import 'package:safesuit_bank/core/presentation/screens/TransSelecionUser.dart';
 
 class TransMont extends StatelessWidget {
   const TransMont({super.key});

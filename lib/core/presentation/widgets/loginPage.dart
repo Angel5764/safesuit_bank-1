@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:safesuit_bank/core/presentation/screers/home.dart';
+import 'package:safesuit_bank/core/presentation/screens/home.dart';
 
 class LoginPage extends StatefulWidget {
   @override

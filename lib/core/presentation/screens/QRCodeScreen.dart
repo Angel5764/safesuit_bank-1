@@ -1,9 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
 class QRCodeScreen extends StatelessWidget {
-  const QRCodeScreen({Key? key}) : super(key: key);
+  const QRCodeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +34,7 @@ class QRCodeScreen extends StatelessWidget {
             const Text(
               'Úsalo para retirar tu dinero!',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18.0,
-              color: Colors.lightBlue),
+              style: TextStyle(fontSize: 18.0, color: Colors.lightBlue),
             ),
             const SizedBox(height: 90.0),
             Center(
@@ -53,5 +50,3 @@ class QRCodeScreen extends StatelessWidget {
     );
   }
 }
-
-

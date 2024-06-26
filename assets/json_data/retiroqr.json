@@ -1,5 +1,5 @@
 {
     "username": "Angel Zea",
-    "cantRetirar": "50000",
-    "saldoDisponible":"100000"
+    "cantRetirar": 50.00,
+    "saldoDisponible": 10.00
 }

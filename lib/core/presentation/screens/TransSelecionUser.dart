@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_state.dart' as bstate;
-import 'package:safesuit_bank/core/presentation/screers/home.dart';
-import 'package:safesuit_bank/core/presentation/screers/TransMonto.dart';
 import '../bloc/transferencia/trans_bloc.dart';
+import 'package:safesuit_bank/core/presentation/screens/home.dart';
+import 'package:safesuit_bank/core/presentation/screens/TransMonto.dart';
 
 class TransUser extends StatelessWidget {
   const TransUser({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safesuit_bank/core/presentation/screers/paymentCFE.dart';
+import 'package:safesuit_bank/core/presentation/screens/paymentCFE.dart';
 
 class TransCFE extends StatelessWidget {
   @override
