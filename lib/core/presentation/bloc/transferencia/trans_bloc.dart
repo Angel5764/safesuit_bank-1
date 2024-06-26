@@ -14,7 +14,7 @@ class TransferenciaBloc extends Bloc<TransEvent, TransState> {
 
     on<LoadTransDataEvent>((event, emit) {
       emit(state.copyWith(
-        amountransfer: event.amountransfer,
+        ownertransfer: event.ownertransfer,
       ));
     });
   }

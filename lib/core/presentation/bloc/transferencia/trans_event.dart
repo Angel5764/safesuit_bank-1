@@ -9,6 +9,8 @@ abstract class TransEvent extends Equatable {
 
 class LoadTransDataEvent extends TransEvent {
   get amountransfer => null;
+
+  get ownertransfer => null;
 }
 
 class CantTransferirChanged extends TransEvent {
