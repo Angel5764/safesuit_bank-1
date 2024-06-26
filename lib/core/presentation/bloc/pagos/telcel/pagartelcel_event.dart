@@ -7,14 +7,12 @@ abstract class PagartelcelEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPagartelcelDataEvent extends PagartelcelEvent {
-    get importe => null;
-}
+class LoadPagartelcelDataEvent extends PagartelcelEvent {}
 
 class ImporteChanged extends PagartelcelEvent {
-  final double Importe;
+  final double importe;
 
-  const ImporteChanged(this.Importe);
+  const ImporteChanged(this.importe);
   @override
-  List<Object> get props => [Importe];
+  List<Object> get props => [importe];
 }
