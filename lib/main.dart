@@ -4,17 +4,23 @@ import 'package:local_auth/local_auth.dart';
 import 'package:safesuit_bank/core/presentation/screens/home.dart';
 import 'package:safesuit_bank/core/presentation/screens/UserRegistration.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+void
+    main() {
+  WidgetsFlutterBinding
+      .ensureInitialized();
   //initializeNotifications();
-  runApp(const MyApp());
+  runApp(
+      const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp
+    extends StatelessWidget {
+  const MyApp(
+      {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget
+      build(BuildContext context) {
     return MaterialApp(
       title: 'Safe Suit Bank',
       debugShowCheckedModeBanner: false,
@@ -24,24 +30,36 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class MyHomePage
+    extends StatefulWidget {
+  const MyHomePage(
+      {super.key,
+      required this.title});
+  final String
+      title;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() =>
+      _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  bool _isChecked = false;
-  final LocalAuthentication _localAuthentication = LocalAuthentication();
+class _MyHomePageState
+    extends State<MyHomePage> {
+  bool
+      _isChecked =
+      false;
+  final LocalAuthentication
+      _localAuthentication =
+      LocalAuthentication();
 
-  Future<void> _auth() async {
-    bool authenticated = false;
+  Future<void>
+      _auth() async {
+    bool
+        authenticated =
+        false;
     try {
       authenticated = await _localAuthentication.authenticate(
         localizedReason: "Autenticate para acceder",
-        options: const AuthenticationOptions(
-            stickyAuth: true, useErrorDialogs: true),
+        options: const AuthenticationOptions(stickyAuth: true, useErrorDialogs: true),
       );
     } catch (e) {
       if (kDebugMode) {
@@ -64,10 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget
+      build(BuildContext context) {
     // Las variables _isChecked, _phoneNumber y _password deberían definirse fuera del método build para evitar redeclaraciones en cada reconstrucción. Aquí se mantienen para coincidir con la estructura del código proporcionado.
-    String phoneNumber = "";
-    String password = "";
+    String
+        phoneNumber =
+        "";
+    String
+        password =
+        "";
 
     return Scaffold(
       // appBar: AppBar(
@@ -103,8 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 fit: BoxFit.contain,
               ),
               TextField(
-                decoration:
-                    const InputDecoration(hintText: "Numero de telefono"),
+                decoration: const InputDecoration(hintText: "Numero de telefono"),
                 controller: TextEditingController(text: phoneNumber),
               ),
               TextField(

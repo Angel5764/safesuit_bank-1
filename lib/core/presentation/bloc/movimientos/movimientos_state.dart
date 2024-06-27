@@ -1,25 +1,39 @@
 import 'package:equatable/equatable.dart';
 import 'package:safesuit_bank/core/domain/models/movimientosModel.dart';
 
-class MovimientosState extends Equatable {
-  final String username;
-  final double monto;
-  final DateTime fecha;
-  final DateTime hora;
+class MovimientosState
+    extends Equatable {
+  final String
+      username;
+  final double
+      monto;
+  final DateTime
+      fecha;
+  final DateTime
+      hora;
 
   MovimientosState({
-    this.username = '',
-    this.monto = 0.0,
-    DateTime? fecha,
-    DateTime? hora,
+    this.username =
+        '',
+    this.monto =
+        0.0,
+    DateTime?
+        fecha,
+    DateTime?
+        hora,
   })  : fecha = fecha ?? DateTime(1970, 1, 1),
         hora = hora ?? DateTime(1970, 1, 1, 0, 0, 0);
 
-  MovimientosState copyWith({
-    String? username,
-    double? monto,
-    DateTime? fecha,
-    DateTime? hora,
+  MovimientosState
+      copyWith({
+    String?
+        username,
+    double?
+        monto,
+    DateTime?
+        fecha,
+    DateTime?
+        hora,
   }) {
     return MovimientosState(
       username: username ?? this.username,
@@ -30,14 +44,20 @@ class MovimientosState extends Equatable {
   }
 
   @override
-  List<Object> get props => [username, monto, fecha, hora];
+  List<Object> get props =>
+      [
+        username,
+        monto,
+        fecha,
+        hora
+      ];
 
-  factory MovimientosState.fromModel(MovimientosModel model) {
+  factory MovimientosState.fromModel(
+      MovimientosModel model) {
     return MovimientosState(
-      username: model.username,
-      monto: model.monto,
-      fecha: model.fecha,
-      hora: model.hora
-    );
+        username: model.username,
+        monto: model.monto,
+        fecha: model.fecha,
+        hora: model.hora);
   }
 }
