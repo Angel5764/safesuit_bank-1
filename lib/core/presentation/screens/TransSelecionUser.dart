@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:safesuit_bank/core/domain/usecases/load_trans_data.dart';
+import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_event.dart';
 import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_state.dart' as bstate;
+import 'package:safesuit_bank/data/repositories/transfer_repository_impl.dart';
 import '../bloc/transferencia/trans_bloc.dart';
 import 'package:safesuit_bank/core/presentation/screens/home.dart';
 import 'package:safesuit_bank/core/presentation/screens/TransMonto.dart';
@@ -10,7 +13,11 @@ class TransUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TransferenciasPage();
+    return BlocProvider(
+      create: (context) => TransferenciaBloc(LoadTransData(TransferRepositoryImpl()))
+        ..add(LoadTransDataEvent()),
+      child: const TransferenciasPage(),
+    );
   }
 }
 
@@ -76,56 +83,51 @@ class _TransferenciasPageState extends State<TransferenciasPage> {
             const SizedBox(height: 50.0),
             BlocBuilder<TransferenciaBloc, bstate.TransState>(
               builder: (context, state) {
-              TextEditingController namecontroller = TextEditingController(text: state.ownertransfer);
-              TextEditingController cardnumber = TextEditingController(text: state.numbercardtransfer);
+                String namecontroller = state.ownertransfer;
+                String cardnumber = state.numbercardtransfer;
+                double amountransfer = state.amountransfer;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                    state.ownertransfer.length,
-                    (index) {
-                      return Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                usuarioSeleccionado = state.ownertransfer;
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TransMont(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 350,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 212, 205, 197),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              margin: const EdgeInsets.all(3),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  '$namecontroller\n$cardnumber',
-                                  textAlign: TextAlign.left,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Color.fromARGB(255, 0, 43, 135),
-                                  ),
-                                ),
-                              ),
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          usuarioSeleccionado = state.ownertransfer;
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TransMont(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 350,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 212, 205, 197),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        margin: const EdgeInsets.all(3),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            '$namecontroller\n$cardnumber \$$amountransfer',
+                            textAlign: TextAlign.left,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 0, 43, 135),
                             ),
                           ),
-                          const SizedBox(height: 20),
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                      ),
+                    ),
+                    // }),
+                    const SizedBox(height: 20),
+                  ],
                 );
               },
             ),

@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:equatable/equatable.dart';
 
 abstract class TransEvent extends Equatable {
@@ -7,16 +9,39 @@ abstract class TransEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadTransDataEvent extends TransEvent {
-  get amountransfer => null;
+class LoadTransDataEvent extends TransEvent {}
 
-  get ownertransfer => null;
+class numbercardtransferChanged extends TransEvent {
+  final String numbercardtransfer;
+
+  const numbercardtransferChanged(this.numbercardtransfer);
+
+  @override
+  List<Object> get props => [numbercardtransfer];
 }
 
-class CantTransferirChanged extends TransEvent {
+class ownertransferChanged extends TransEvent {
+  final String ownertransfer;
+
+  const ownertransferChanged(this.ownertransfer);
+
+  @override
+  List<Object> get props => [ownertransfer];
+}
+
+class bankNametransferChanged extends TransEvent {
+  final String bankNametransfer;
+
+  const bankNametransferChanged(this.bankNametransfer);
+
+  @override
+  List<Object> get props => [bankNametransfer];
+}
+
+class amountransferChanged extends TransEvent {
   final double amountransfer;
 
-  const CantTransferirChanged(this.amountransfer);
+  const amountransferChanged(this.amountransfer);
 
   @override
   List<Object> get props => [amountransfer];
