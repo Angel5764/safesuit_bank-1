@@ -14,20 +14,20 @@ class SidebarBloc extends Bloc<SidebarEvent, SidebarState> {
 
     on<SidebarPerfilChanged>((event, emit) {
       emit(state.copyWith(
-        username: event.username,
-        email: event.email,
+        accountName: event.accountName,
+        accountEmail: event.accountEmail,
       ));
     });
 
     on<SidebarUsernameChanged>((event, emit) {
       emit(state.copyWith(
-        username: event.username,
+        accountName: event.accountName,
       ));
     });
 
     on<SidebarEmailChanged>((event, emit) {
       emit(state.copyWith(
-        email: event.email,
+        accountEmail: event.accountEmail,
       ));
     });
   }

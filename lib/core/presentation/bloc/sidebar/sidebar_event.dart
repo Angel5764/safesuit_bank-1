@@ -10,29 +10,29 @@ abstract class SidebarEvent extends Equatable {
 class LoadSidebarDataEvent extends SidebarEvent {}
 
 class SidebarPerfilChanged extends SidebarEvent {
-  final String username;
-  final String email;
+  final String accountName;
+  final String accountEmail;
 
-  const SidebarPerfilChanged(this.username, this.email);
+  const SidebarPerfilChanged(this.accountName, this.accountEmail);
 
   @override
-  List<Object> get props => [username, email];
+  List<Object> get props => [accountName, accountEmail];
 }
 
 class SidebarUsernameChanged extends SidebarEvent {
-  final String username;
+  final String accountName;
 
-  const SidebarUsernameChanged(this.username);
+  const SidebarUsernameChanged(this.accountName);
 
   @override
-  List<Object> get props => [username];
+  List<Object> get props => [accountName];
 }
 
 class SidebarEmailChanged extends SidebarEvent {
-  final String email;
+  final String accountEmail;
 
-  const SidebarEmailChanged(this.email);
+  const SidebarEmailChanged(this.accountEmail);
 
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [accountEmail];
 }
