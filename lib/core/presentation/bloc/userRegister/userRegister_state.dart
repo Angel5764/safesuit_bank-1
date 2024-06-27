@@ -8,6 +8,7 @@ class UserRegisterState extends Equatable {
   final String rfc;
   final String phone;
   final String password;
+  final String errorMessage;
 
   const UserRegisterState({
     this.name = '',
@@ -16,28 +17,8 @@ class UserRegisterState extends Equatable {
     this.rfc = '',
     this.phone = '',
     this.password = '',
+    this.errorMessage = '',
   });
-
-  UserRegisterState copyWith({
-    String? name,
-    String? lastName,
-    String? email,
-    String? rfc,
-    String? phone,
-    String? password,
-  }) {
-    return UserRegisterState(
-      name: name ?? this.name,
-      lastName: lastName ?? this.lastName,
-      email: email ?? this.email,
-      rfc: rfc ?? this.rfc,
-      phone: phone ?? this.phone,
-      password: password ?? this.password,
-    );
-  }
-
-  @override
-  List<Object> get props => [name, lastName, email, rfc, phone, password];
 
   factory UserRegisterState.fromModel(UserRegisterModel model) {
     return UserRegisterState(
@@ -49,4 +30,27 @@ class UserRegisterState extends Equatable {
       password: model.password,
     );
   }
+
+  UserRegisterState copyWith({
+    String? name,
+    String? lastName,
+    String? email,
+    String? rfc,
+    String? phone,
+    String? password,
+    String? errorMessage,
+  }) {
+    return UserRegisterState(
+      name: name ?? this.name,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      rfc: rfc ?? this.rfc,
+      phone: phone ?? this.phone,
+      password: password ?? this.password,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  @override
+  List<Object> get props => [name, lastName, email, rfc, phone, password, errorMessage];
 }
