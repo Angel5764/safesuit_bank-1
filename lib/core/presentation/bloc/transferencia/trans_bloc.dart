@@ -7,15 +7,39 @@ class TransferenciaBloc extends Bloc<TransEvent, TransState> {
   final usecase.LoadTransData loadTransData;
 
   TransferenciaBloc(this.loadTransData) : super(const TransState()) {
-    on<LoadTransDataEvent>((event, emit) async {
-      final transData = await loadTransData();
-      emit(TransState.fromModel(transData));
+    on<LoadTransDataEvent>(
+      (event, emit) async {
+        final retiroData = await loadTransData();
+        emit(TransState.fromModel(retiroData));
+      },
+    );
+
+    on<numbercardtransferChanged>((event, emit) {
+      final newState = state.copyWith(
+        numbercardtransfer: event.numbercardtransfer,
+      );
+      emit(newState);
     });
 
-    on<LoadTransDataEvent>((event, emit) {
-      emit(state.copyWith(
+    on<ownertransferChanged>((event, emit) {
+      final newState = state.copyWith(
+        ownertransfer: event.ownertransfer,
+      );
+      emit(newState);
+    });
+
+    on<bankNametransferChanged>((event, emit) {
+      final newState = state.copyWith(
+        bankNametransfer: event.bankNametransfer,
+      );
+      emit(newState);
+    });
+
+    on<amountransferChanged>((event, emit) {
+      final newState = state.copyWith(
         amountransfer: event.amountransfer,
-      ));
+      );
+      emit(newState);
     });
   }
 }

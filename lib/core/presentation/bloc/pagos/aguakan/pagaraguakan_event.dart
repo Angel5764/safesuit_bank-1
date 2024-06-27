@@ -1,3 +1,4 @@
+// pagaraguakan_event.dart
 import 'package:equatable/equatable.dart';
 
 abstract class PagaraguakanEvent extends Equatable {
@@ -7,14 +8,12 @@ abstract class PagaraguakanEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPagaraguakanDataEvent extends PagaraguakanEvent {
-    get importe => null;
-}
+class LoadPagaraguakanDataEvent extends PagaraguakanEvent {}
 
 class ImporteChanged extends PagaraguakanEvent {
-  final double Importe;
+  final double importe;
 
-  const ImporteChanged(this.Importe);
+  const ImporteChanged(this.importe);
   @override
-  List<Object> get props => [Importe];
+  List<Object> get props => [importe];
 }

@@ -6,7 +6,7 @@ import 'package:safesuit_bank/core/domain/repositories/pagaraguakan_repository.d
 class PagaraguakanRepositoryImpl implements PagaraguakanRepository{
   @override
   Future<pagaraguakanModel> loadFormData() async {
-    final response = await rootBundle.loadString('assets/json_data/pagaraguakan.json');
+    final response = await rootBundle.loadString('json_data/pagaraguakan.json');
     final data = json.decode(response);
     print(data);
     return pagaraguakanModel.fromJson(data);

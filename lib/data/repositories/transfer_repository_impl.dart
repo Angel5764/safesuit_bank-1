@@ -6,8 +6,9 @@ import 'package:safesuit_bank/core/domain/repositories/transfer_repository.dart'
 class TransferRepositoryImpl implements TransRepository{
   @override
   Future<TransferModel> loadFormData() async {
-    final response = await rootBundle.loadString('assets/json_data/transfer.json');
+    final response = await rootBundle.loadString('/json_data/transfer.json');
     final data = json.decode(response);
+    print("JSON");
     print(data);
     return TransferModel.fromJson(data);
   }
