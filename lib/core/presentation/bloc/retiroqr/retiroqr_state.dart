@@ -28,6 +28,7 @@ class RetiroState extends Equatable {
     double? cantRetirar,
     double? saldoDisponible,
     bool? isValid,
+    required String errorMessage,
   }) {
     return RetiroState(
       username: username ?? this.username,
@@ -39,9 +40,9 @@ class RetiroState extends Equatable {
 
   @override
   List<Object> get props => [
-        //username,
+        username,
         cantRetirar,
-        //saldoDisponible,
+        saldoDisponible,
         isValid,
       ];
 }

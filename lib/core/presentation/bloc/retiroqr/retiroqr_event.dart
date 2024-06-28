@@ -18,10 +18,10 @@ class CantRetirarChanged extends RetiroEvent {
   List<Object> get props => [cantRetirar];
 }
 
-class UsernameChanged extends RetiroEvent {
+class UsernameRetiro extends RetiroEvent {
   final String username;
 
-  const UsernameChanged(this.username);
+  const UsernameRetiro(this.username);
 
   @override
   List<Object> get props => [username];
@@ -36,4 +36,4 @@ class SaldoDisponibleChanged extends RetiroEvent {
   List<Object> get props => [saldoDisponible];
 }
 
-class QrSubmitted extends RetiroEvent {}
+class RegisterSubmitted extends RetiroEvent {}
