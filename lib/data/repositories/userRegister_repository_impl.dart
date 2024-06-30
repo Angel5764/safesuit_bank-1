@@ -6,7 +6,7 @@ import 'package:safesuit_bank/core/domain/repositories/userRegister_repository.d
 class UserRegisterRepositoryImpl implements UserRegisterRepository{
   @override
   Future<UserRegisterModel> loadFormData() async {
-    final response = await rootBundle.loadString('assets/json_data/userRegister.json');
+    final response = await rootBundle.loadString('json_data/userRegister.json');
     final data = json.decode(response);
     print(data);
     return UserRegisterModel.fromJson(data);

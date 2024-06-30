@@ -3,11 +3,12 @@ import 'package:safesuit_bank/core/domain/repositories/userRegister_repository.d
 
 class LoadUserRegisterData {
   final UserRegisterRepository repository;
+
   LoadUserRegisterData(this.repository);
 
   Future<UserRegisterModel> call() async {
     final userData = await repository.loadFormData();
-    
+
     // Validaciones
     if (userData.name.isEmpty) {
       throw Exception("El nombre no puede estar vacío");
@@ -21,7 +22,7 @@ class LoadUserRegisterData {
     if (userData.rfc.isEmpty || userData.rfc.length != 13) {
       throw Exception("El RFC debe tener 13 caracteres");
     }
-    if (userData.phone.isEmpty || userData.phone.length != 10 || !_esNumero(userData.phone)) {
+    if (userData.phone.isEmpty) {
       throw Exception("El teléfono debe tener 10 dígitos");
     }
     if (userData.password.isEmpty || userData.password.length < 6) {
