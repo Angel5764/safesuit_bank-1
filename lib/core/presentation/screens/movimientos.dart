@@ -1,15 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
+import 'package:safesuit_bank/core/domain/usecases/load_movimientos_data.dart';
+import 'package:safesuit_bank/core/domain/repositories/movimientos_repository.dart';
+import 'package:safesuit_bank/core/presentation/bloc/movimientos/movimientos_bloc.dart';
+import 'package:safesuit_bank/core/presentation/bloc/movimientos/movimientos_event.dart';
+import 'package:safesuit_bank/core/presentation/bloc/movimientos/movimientos_state.dart';
+import 'package:safesuit_bank/data/repositories/movimientos_repository_impl.dart';
 
 class TransactionView extends StatelessWidget {
+  const TransactionView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final MovimientosRepository movimientosRepository = MovimientosRepositoryImpl();
+    final MovimientosBloc movimientosBloc = MovimientosBloc(LoadMovimientosData(movimientosRepository));
+    movimientosBloc.add(LoadMovimientosDataEvent());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Movimientos',
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 28, color: Color.fromARGB(255, 242, 244, 250)),
+            fontSize: 28,
+            color: Color.fromARGB(255, 242, 244, 250),
+          ),
         ),
         backgroundColor: Color.fromARGB(255, 66, 79, 120),
         leading: IconButton(
@@ -19,49 +36,49 @@ class TransactionView extends StatelessWidget {
           },
         ),
       ),
-      body: ListView(
-        children: <Widget>[
-          _buildTransactionSection(
-            date: '10 diciembre 2023',
-            transactions: [
-              _Transaction(
-                title: 'MauricioCamara',
-                subtitle: 'Enviaste',
-                time: '2:13 p.m.',
-                amount: '-\$19.00',
-              ),
-            ],
-          ),
-          _buildTransactionSection(
-            date: '05 diciembre 2023',
-            transactions: [
-              _Transaction(
-                title: 'mi OXXO APP',
-                subtitle: 'Compraste',
-                time: '3:29 p.m.',
-                amount: '-\$50.00',
-              ),
-              _Transaction(
-                title: 'Paypal',
-                subtitle: 'Compraste',
-                time: '4:50 p.m.',
-                amount: '-\$90.00',
-              ),
-            ],
-          ),
-        ],
+      body: BlocProvider(
+        create: (_) => movimientosBloc,
+        child: BlocBuilder<MovimientosBloc, MovimientosState>(
+          builder: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              return Center(
+                child: Text(
+                  state.errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            if (state.transactions.isEmpty) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            return ListView.builder(
+              itemCount: state.transactions.length,
+              itemBuilder: (context, index) {
+                final transaction = state.transactions[index];
+                return _buildTransactionSection(
+                  date: transaction.fecha,
+                  transactions: [transaction],
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildTransactionSection({String? date, List<_Transaction>? transactions}) {
+  Widget _buildTransactionSection({required DateTime date, required List<TransactionEntity> transactions}) {
+    final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            date!,
+            formattedDate,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -69,31 +86,24 @@ class TransactionView extends StatelessWidget {
           ),
         ),
         Column(
-          children: transactions!.map((tx) => _buildTransactionCard(tx)).toList(),
+          children: transactions.map((tx) => _buildTransactionCard(tx)).toList(),
         ),
       ],
     );
   }
 
-  Widget _buildTransactionCard(_Transaction tx) {
+  Widget _buildTransactionCard(TransactionEntity tx) {
+    final formattedDate = DateFormat('yyyy-MM-dd').format(tx.fecha);
+
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       color: Color.fromRGBO(217, 217, 217, 1),
       child: ListTile(
-        title: Text(tx.title),
-        subtitle: Text('${tx.subtitle}\n${tx.time}'),
-        trailing: Text(tx.amount),
+        title: Text(tx.username),
+        subtitle: Text('Fecha: $formattedDate\nStatus: ${tx.status}'),
+        trailing: Text(tx.monto.toString()),
         isThreeLine: true,
       ),
     );
   }
-}
-
-class _Transaction {
-  final String title;
-  final String subtitle;
-  final String time;
-  final String amount;
-
-  _Transaction({required this.title, required this.subtitle, required this.time, required this.amount});
 }

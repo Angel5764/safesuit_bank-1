@@ -1,43 +1,57 @@
 import 'package:equatable/equatable.dart';
+import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
 import 'package:safesuit_bank/core/domain/models/movimientosModel.dart';
 
 class MovimientosState extends Equatable {
   final String username;
   final double monto;
   final DateTime fecha;
-  final DateTime hora;
+  final String status;
+  final String errorMessage; // Nuevo campo para mensajes de error
 
   MovimientosState({
     this.username = '',
     this.monto = 0.0,
     DateTime? fecha,
-    DateTime? hora,
-  })  : fecha = fecha ?? DateTime(1970, 1, 1),
-        hora = hora ?? DateTime(1970, 1, 1, 0, 0, 0);
+    this.status = '',
+    this.errorMessage = '', // Inicializado como cadena vacía
+  }) : fecha = fecha ?? DateTime(1970, 1, 1);
+
+  List<TransactionEntity> get transactions => [
+        TransactionEntity(
+          username: username,
+          monto: monto,
+          fecha: fecha,
+          status: status,
+        )
+      ];
 
   MovimientosState copyWith({
     String? username,
     double? monto,
     DateTime? fecha,
-    DateTime? hora,
+    String? status,
+    String? errorMessage, // Agregamos el parámetro para el mensaje de error
   }) {
     return MovimientosState(
       username: username ?? this.username,
       monto: monto ?? this.monto,
       fecha: fecha ?? this.fecha,
-      hora: hora ?? this.hora,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object> get props => [username, monto, fecha, hora];
+  List<Object> get props => [username, monto, fecha, status, errorMessage];
 
   factory MovimientosState.fromModel(MovimientosModel model) {
     return MovimientosState(
       username: model.username,
       monto: model.monto,
       fecha: model.fecha,
-      hora: model.hora
+      status: model.status,
+      errorMessage: '', // Inicializado como cadena vacía
     );
   }
 }

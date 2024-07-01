@@ -27,8 +27,8 @@ class LoadMovimientosData {
     if (movimientosData.fecha.isAfter(DateTime.now())) {
       throw Exception("La fecha no puede ser en el futuro");
     }
-    if (movimientosData.hora.isAfter(DateTime.now())) {
-      throw Exception("La hora no puede ser en el futuro");
+    if (!_esStatusValido(movimientosData.status)) {
+      throw Exception("El estado de la transacción no es válido");
     }
 
     return movimientosData;
@@ -42,5 +42,10 @@ class LoadMovimientosData {
   bool _esDouble(double value) {
     final decimalRegex = RegExp(r'^\d+(\.\d{1,2})?$');
     return decimalRegex.hasMatch(value.toString());
+  }
+
+  bool _esStatusValido(String status) {
+    final validStatuses = ['Enviado', 'Pendiente', 'Completado', 'Cancelado'];
+    return validStatuses.contains(status);
   }
 }

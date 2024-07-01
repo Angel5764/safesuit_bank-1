@@ -8,8 +8,12 @@ class SidebarBloc extends Bloc<SidebarEvent, SidebarState> {
 
   SidebarBloc(this.loadSidebarData) : super(const SidebarState()) {
     on<LoadSidebarDataEvent>((event, emit) async {
-      final sidebarData = await loadSidebarData();
-      emit(SidebarState.fromModel(sidebarData));
+      try {
+        final sidebarData = await loadSidebarData();
+        emit(SidebarState.fromModel(sidebarData));
+      } catch (error) {
+        emit(state.copyWith(errorMessage: error.toString()));
+      }
     });
 
     on<SidebarPerfilChanged>((event, emit) {
