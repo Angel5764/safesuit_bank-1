@@ -54,3 +54,17 @@ class UserRegisterState extends Equatable {
   @override
   List<Object> get props => [name, lastName, email, rfc, phone, password, errorMessage];
 }
+class RegisterInitial extends UserRegisterState {}
+
+class RegisterLoading extends UserRegisterState {}
+
+class RegisterSuccess extends UserRegisterState {}
+
+class RegisterError extends UserRegisterState {
+  final String message;
+
+  const RegisterError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

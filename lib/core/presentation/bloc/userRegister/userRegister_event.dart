@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:safesuit_bank/core/domain/models/userRegisterModel.dart';
 
 abstract class UserRegisterEvent extends Equatable {
   const UserRegisterEvent();
@@ -61,4 +62,13 @@ class PasswordChanged extends UserRegisterEvent {
 
   @override
   List<Object> get props => [password];
+}
+
+class SubmitUserRegister extends UserRegisterEvent {
+  final UserRegisterModel register;
+
+  const SubmitUserRegister(this.register);
+
+  @override
+  List<Object?> get props => [register];
 }
