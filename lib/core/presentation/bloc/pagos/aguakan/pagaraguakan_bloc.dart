@@ -24,3 +24,4 @@ class PagaraguakanBloc extends Bloc<PagaraguakanEvent, PagaraguakanState> {
     });
   }
 }
+  

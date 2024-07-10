@@ -16,7 +16,8 @@ class TransferModel{
     required this.amountransfer
   });
 
-  factory TransferModel.fromJson(Map<String, dynamic> json) => _$TransferModelFromJson(json);
+  factory TransferModel.fromJson(Map<String, dynamic> json) => 
+      _$TransferModelFromJson(json);
   Map<String, dynamic> toJson() => _$TransferModelToJson(this);
   
 }

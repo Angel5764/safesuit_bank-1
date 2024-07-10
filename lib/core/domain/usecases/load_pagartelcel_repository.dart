@@ -13,8 +13,8 @@ class LoadPagartelcelData {
     if (pagarTelcelData.NoTelcel.isEmpty || !_esUnTelefono(pagarTelcelData.NoTelcel)) {
       throw Exception("Numero telcel está vacío o no es un número de teléfono válido");
     }
-    if (_esDouble(pagarTelcelData.Importe) || pagarTelcelData.Importe < 9) {
-      throw Exception("El importe debe ser un número positivo");
+    if (pagarTelcelData.Importe < 9) {
+      throw Exception("El importe debe ser superior a 9");
     }
 
     return pagarTelcelData;
