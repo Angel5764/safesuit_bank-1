@@ -4,15 +4,16 @@ import 'userRegister_event.dart';
 import 'userRegister_state.dart';
 
 class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
-  final usecase.LoadUserRegisterData loadUserRegisterData;
+  final usecase.SubmitUserRegisterData submitUserRegisterData;
 
-  UserRegisterBloc(this.loadUserRegisterData) : super(const UserRegisterState()) {
-    on<LoadUserRegisterEvent>((event, emit) async {
+  UserRegisterBloc(this.submitUserRegisterData) : super(RegisterInitial()) {
+    on<SubmitUserRegister>((event, emit) async {
+      emit(RegisterLoading());
       try {
-        final userRegisterData = await loadUserRegisterData();
-        emit(UserRegisterState.fromModel(userRegisterData));
+        await submitUserRegisterData(event.register);
+        emit(RegisterSuccess());
       } catch (error) {
-        emit(state.copyWith(errorMessage: error.toString()));
+        emit(const RegisterError('Failed to submit Register'));
       }
     });
 
