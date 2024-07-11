@@ -1,12 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:safesuit_bank/core/domain/usecases/load_user_data.dart';
+import 'package:safesuit_bank/core/presentation/bloc/user/user_bloc.dart';
+import 'package:safesuit_bank/core/presentation/bloc/user/user_event.dart';
+import 'package:safesuit_bank/core/presentation/bloc/user/user_state.dart';
 import 'package:safesuit_bank/core/presentation/screens/home.dart';
 import 'package:safesuit_bank/core/presentation/screens/UserRegistration.dart';
+import 'package:safesuit_bank/data/repositories/user_repository_impl.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //initializeNotifications();
   runApp(const MyApp());
 }
 
@@ -19,7 +24,10 @@ class MyApp extends StatelessWidget {
       title: 'Safe Suit Bank',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: const MyHomePage(title: ''),
+      home: BlocProvider(
+        create: (context) => UserBloc(userRepository: UserRepositoryImpl()),
+        child: const MyHomePage(title: ''),
+      ),
     );
   }
 }
@@ -34,6 +42,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool _isChecked = false;
   final LocalAuthentication _localAuthentication = LocalAuthentication();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _auth() async {
     bool authenticated = false;
@@ -65,114 +75,129 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Las variables _isChecked, _phoneNumber y _password deberían definirse fuera del método build para evitar redeclaraciones en cada reconstrucción. Aquí se mantienen para coincidir con la estructura del código proporcionado.
-    String phoneNumber = "";
-    String password = "";
-
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      //   title: Text(widget.title),
-      // ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(11.0),
-          width: 480,
-          height: 566,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: Colors.black,
-              width: 2.0,
+      body: BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is UserAuthenticated) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const MyApp()),
+            );
+          }
+          if (state is UserAuthenticationFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+        },
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.all(11.0),
+            width: 480,
+            height: 566,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                color: Colors.black,
+                width: 2.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              const Image(
-                image: AssetImage("assets/images/Logo.jpg"),
-                height: 200,
-                fit: BoxFit.contain,
-              ),
-              TextField(
-                decoration:
-                    const InputDecoration(hintText: "Numero de telefono"),
-                controller: TextEditingController(text: phoneNumber),
-              ),
-              TextField(
-                decoration: const InputDecoration(hintText: "Contraseña"),
-                controller: TextEditingController(text: password),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Checkbox(
-                    value: _isChecked,
-                    onChanged: (newValue) {
-                      setState(() => _isChecked = newValue!);
-                    },
-                    checkColor: Colors.black,
-                    fillColor: MaterialStateProperty.all(Colors.white),
+            child: Column(
+              children: [
+                const Image(
+                  image: AssetImage("assets/images/Logo.jpg"),
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
+                TextField(
+                  decoration:
+                      const InputDecoration(hintText: "Numero de telefono"),
+                  controller: _phoneController,
+                ),
+                TextField(
+                  decoration: const InputDecoration(hintText: "Contraseña"),
+                  controller: _passwordController,
+                  obscureText: true,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Checkbox(
+                      value: _isChecked,
+                      onChanged: (newValue) {
+                        setState(() => _isChecked = newValue!);
+                      },
+                      checkColor: Colors.black,
+                      fillColor: MaterialStateProperty.all(Colors.white),
+                    ),
+                    const Text("Mantener sesion activa"),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (LoadUserData.validatePhoneNumber(_phoneController.text) &&
+                        LoadUserData.validatePassword(_passwordController.text)) {
+                      BlocProvider.of<UserBloc>(context).add(
+                        LoginButtonPressed(
+                          phoneNumber: _phoneController.text,
+                          password: _passwordController.text,
+                          context: context,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Número de teléfono o contraseña inválidos')),
+                      );
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
                   ),
-                  const Text("Mantener sesion activa"),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomeView(),
-                    ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                  child: const Text(
+                    "Inicia sesión",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-                child: const Text(
-                  "Inicia sesión",
-                  style: TextStyle(color: Colors.white),
+                const Text("\nO"),
+                IconButton(
+                  onPressed: () => {
+                    _auth(),
+                  },
+                  icon: const Icon(
+                    Icons.fingerprint,
+                    size: 50,
+                  ),
                 ),
-              ),
-              const Text("\nO"),
-              IconButton(
-                onPressed: () => {
-                  _auth(),
-                },
-                icon: const Icon(
-                  Icons.fingerprint,
-                  size: 50,
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserRegistrationView(),
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                  ),
+                  child: const Text(
+                    "registrarse",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserRegistrationView(),
-                    ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
-                ),
-                child: const Text(
-                  "registrarse",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class UserEvent extends Equatable {
   const UserEvent();
@@ -7,15 +8,17 @@ abstract class UserEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadUserDataEvent extends UserEvent {
-  get amounUser => null;
-}
+class LoginButtonPressed extends UserEvent {
+  final String phoneNumber;
+  final String password;
+  final BuildContext context;
 
-class CantUserChanged extends UserEvent {
-  final double amounUser;
-
-  const CantUserChanged(this.amounUser);
+  const LoginButtonPressed({
+    required this.phoneNumber,
+    required this.password,
+    required this.context,
+  });
 
   @override
-  List<Object> get props => [amounUser];
+  List<Object> get props => [phoneNumber, password, context];
 }
