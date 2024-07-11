@@ -5,11 +5,12 @@ part 'sidebarModel.g.dart';
 @JsonSerializable()
 class SidebarModel {
 
-  final String username;
-  final String email;
+  final String accountName;
+  final String accountEmail;
 
-  SidebarModel ({required this.username,
-  required this.email,
+  SidebarModel ({
+  required this.accountName,
+  required this.accountEmail,
   });
 
   factory SidebarModel.fromJson(Map<String, dynamic> json) => _$SidebarModelFromJson(json);

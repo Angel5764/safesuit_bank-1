@@ -1,33 +1,35 @@
 import 'package:equatable/equatable.dart';
-import 'package:safesuit_bank/core/domain/models/sidebarModel.dart';
 
 class SidebarState extends Equatable {
-  final String username;
-  final String email;
+  final String accountName;
+  final String accountEmail;
+  final String errorMessage;
 
   const SidebarState({
-    this.username = '',
-    this.email = '',
+    this.accountName = '',
+    this.accountEmail = '',
+    this.errorMessage = '',
   });
 
   SidebarState copyWith({
-    String? username,
-    String? email,
-
+    String? accountName,
+    String? accountEmail,
+    String? errorMessage,
   }) {
     return SidebarState(
-      username: username ?? this.username,
-      email: email ?? this.email,
+      accountName: accountName ?? this.accountName,
+      accountEmail: accountEmail ?? this.accountEmail,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  factory SidebarState.fromModel(dynamic model) {
+    return SidebarState(
+      accountName: model.accountName,
+      accountEmail: model.accountEmail,
     );
   }
 
   @override
-  List<Object> get props => [username, email];
-
-  factory SidebarState.fromModel(SidebarModel model) {
-    return SidebarState(
-      username: model.username,
-      email: model.email
-    );
-  }
+  List<Object> get props => [accountName, accountEmail, errorMessage];
 }

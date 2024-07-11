@@ -7,12 +7,12 @@ part of 'sidebarModel.dart';
 // **************************************************************************
 
 SidebarModel _$SidebarModelFromJson(Map<String, dynamic> json) => SidebarModel(
-      username: json['username'] as String,
-      email: json['email'] as String,
+      accountName: json['accountName'] as String,
+      accountEmail: json['accountEmail'] as String,
     );
 
 Map<String, dynamic> _$SidebarModelToJson(SidebarModel instance) =>
     <String, dynamic>{
-      'username': instance.username,
-      'email': instance.email,
+      'accountName': instance.accountName,
+      'accountEmail': instance.accountEmail,
     };

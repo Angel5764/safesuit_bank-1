@@ -8,14 +8,30 @@ class SidebarBloc extends Bloc<SidebarEvent, SidebarState> {
 
   SidebarBloc(this.loadSidebarData) : super(const SidebarState()) {
     on<LoadSidebarDataEvent>((event, emit) async {
-      final sidebarData = await loadSidebarData();
-      emit(SidebarState.fromModel(sidebarData));
+      try {
+        final sidebarData = await loadSidebarData();
+        emit(SidebarState.fromModel(sidebarData));
+      } catch (error) {
+        emit(state.copyWith(errorMessage: error.toString()));
+      }
     });
 
     on<SidebarPerfilChanged>((event, emit) {
       emit(state.copyWith(
-        username: event.username,
-        email: event.email        
+        accountName: event.accountName,
+        accountEmail: event.accountEmail,
+      ));
+    });
+
+    on<SidebarUsernameChanged>((event, emit) {
+      emit(state.copyWith(
+        accountName: event.accountName,
+      ));
+    });
+
+    on<SidebarEmailChanged>((event, emit) {
+      emit(state.copyWith(
+        accountEmail: event.accountEmail,
       ));
     });
   }

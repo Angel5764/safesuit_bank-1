@@ -1,9 +1,9 @@
 class SidebarEntity{
-  final String username;
-  final String email;
+  final String accountName;
+  final String accountEmail;
 
   SidebarEntity ({
-    required this.username,
-    required this.email
+    required this.accountName,
+    required this.accountEmail
   });
 }

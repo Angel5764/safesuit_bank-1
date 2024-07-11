@@ -10,19 +10,19 @@ class LoadSidebarData {
     final sidebarData = await repository.loadFormData();
 
     // Validaciones
-    if (sidebarData.username.isEmpty) {
+    if (sidebarData.accountName.isEmpty) {
       throw Exception("El nombre de usuario no puede estar vacío");
     }
-    if (sidebarData.username.length < 3) {
+    if (sidebarData.accountName.length < 3) {
       throw Exception("El nombre de usuario debe tener al menos 3 caracteres");
     }
-    if (!_esCarateres(sidebarData.username)) {
+    if (!_esCarateres(sidebarData.accountName)) {
       throw Exception("El nombre de usuario solo puede contener letras");
     }
-    if (sidebarData.email.isEmpty) {
+    if (sidebarData.accountEmail.isEmpty) {
       throw Exception("El correo electrónico no puede estar vacío");
     }
-    if (!_esEmailValido(sidebarData.email)) {
+    if (!_esEmailValido(sidebarData.accountEmail)) {
       throw Exception("El formato del correo electrónico no es válido");
     }
 

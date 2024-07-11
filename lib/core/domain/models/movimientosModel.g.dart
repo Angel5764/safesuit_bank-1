@@ -11,7 +11,7 @@ MovimientosModel _$MovimientosModelFromJson(Map<String, dynamic> json) =>
       username: json['username'] as String,
       monto: (json['monto'] as num).toDouble(),
       fecha: DateTime.parse(json['fecha'] as String),
-      hora: DateTime.parse(json['hora'] as String),
+      status: json['status'] as String,
     );
 
 Map<String, dynamic> _$MovimientosModelToJson(MovimientosModel instance) =>
@@ -19,5 +19,5 @@ Map<String, dynamic> _$MovimientosModelToJson(MovimientosModel instance) =>
       'username': instance.username,
       'monto': instance.monto,
       'fecha': instance.fecha.toIso8601String(),
-      'hora': instance.hora.toIso8601String(),
+      'status': instance.status,
     };

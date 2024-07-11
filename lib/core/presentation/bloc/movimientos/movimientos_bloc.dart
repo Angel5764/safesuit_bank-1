@@ -8,16 +8,35 @@ class MovimientosBloc extends Bloc<MovimientosEvent, MovimientosState> {
 
   MovimientosBloc(this.loadMovimientosData) : super(MovimientosState()) {
     on<LoadMovimientosDataEvent>((event, emit) async {
-      final movimientosData = await loadMovimientosData();
-      emit(MovimientosState.fromModel(movimientosData));
+      try {
+        final movimientosData = await loadMovimientosData();
+        emit(MovimientosState.fromModel(movimientosData));
+      } catch (error) {
+        emit(state.copyWith(errorMessage: error.toString()));
+      }
     });
 
-    on<CantMovimientosChanged>((event, emit) {
+    on<MovimientosUsernameChanged>((event, emit) {
       emit(state.copyWith(
         username: event.username,
+      ));
+    });
+
+    on<MovimientosMontoChanged>((event, emit) {
+      emit(state.copyWith(
         monto: event.monto,
+      ));
+    });
+
+    on<MovimientosFechaChanged>((event, emit) {
+      emit(state.copyWith(
         fecha: event.fecha,
-        hora: event.hora        
+      ));
+    });
+
+    on<MovimientosStatusChanged>((event, emit) {
+      emit(state.copyWith(
+        status: event.status,
       ));
     });
   }

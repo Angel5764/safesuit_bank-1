@@ -9,14 +9,38 @@ abstract class MovimientosEvent extends Equatable {
 
 class LoadMovimientosDataEvent extends MovimientosEvent {}
 
-class CantMovimientosChanged extends MovimientosEvent {
+class MovimientosUsernameChanged extends MovimientosEvent {
   final String username;
-  final double monto;
-  final DateTime fecha;
-  final DateTime hora;
 
-  const CantMovimientosChanged(this.username, this.monto, this.fecha, this.hora);
+  const MovimientosUsernameChanged(this.username);
 
   @override
-  List<Object> get props => [username, monto, fecha, hora];
+  List<Object> get props => [username];
+}
+
+class MovimientosMontoChanged extends MovimientosEvent {
+  final double monto;
+
+  const MovimientosMontoChanged(this.monto);
+
+  @override
+  List<Object> get props => [monto];
+}
+
+class MovimientosFechaChanged extends MovimientosEvent {
+  final DateTime fecha;
+
+  const MovimientosFechaChanged(this.fecha);
+
+  @override
+  List<Object> get props => [fecha];
+}
+
+class MovimientosStatusChanged extends MovimientosEvent {
+  final String status;
+
+  const MovimientosStatusChanged(this.status);
+
+  @override
+  List<Object> get props => [status];
 }

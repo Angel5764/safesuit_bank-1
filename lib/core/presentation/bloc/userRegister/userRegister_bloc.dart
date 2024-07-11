@@ -17,6 +17,13 @@ class UserRegisterBloc extends Bloc<UserRegisterEvent, UserRegisterState> {
       }
     });
 
+    on<LoadUserRegisterEvent>((event, emit) async {
+      // Aquí deberías cargar los datos necesarios para la vista de registro
+      // Esto puede incluir cargar datos de un repositorio o realizar otras operaciones necesarias.
+      // Como ejemplo, aquí se emite directamente el estado inicial del registro.
+      emit(RegisterInitial());
+    });
+
     on<NameChanged>((event, emit) {
       emit(state.copyWith(
         name: event.name, errorMessage: '',
