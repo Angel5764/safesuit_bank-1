@@ -34,6 +34,15 @@ class LoadUserData {
     return userData;
   }
 
+  static bool validatePhoneNumber(String phoneNumber) {
+    final RegExp phoneExp = RegExp(r'^\d{10}$');
+    return phoneExp.hasMatch(phoneNumber);
+  }
+
+  static bool validatePassword(String password) {
+    return password.isNotEmpty && password.length >= 6;
+  }
+
   bool _esCarateres(String str) {
     final alphaRegex = RegExp(r'^[a-zA-Z]+$');
     return alphaRegex.hasMatch(str);
