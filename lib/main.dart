@@ -83,11 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
               MaterialPageRoute(builder: (context) => const MyApp()),
             );
           }
-          if (state is UserAuthenticationFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
-          }
         },
         child: Center(
           child: Container(
@@ -152,6 +147,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           context: context,
                         ),
                       );
+                      Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeView()));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Número de teléfono o contraseña inválidos')),
@@ -164,6 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: const Text(
                     "Inicia sesión",
                     style: TextStyle(color: Colors.white),
+
                   ),
                 ),
                 const Text("\nO"),
