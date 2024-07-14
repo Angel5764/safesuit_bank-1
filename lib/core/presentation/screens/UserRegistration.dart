@@ -26,8 +26,7 @@ class _UserRegistrationViewState extends State<UserRegistrationView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserRegisterBloc(SubmitUserRegisterData(UserRegisterRepositoryImpl()))
-        ..add(LoadUserRegisterEvent()),
+      create: (context) => UserRegisterBloc(SubmitUserRegisterData(UserRegisterRepositoryImpl())),
       child: BlocBuilder<UserRegisterBloc, UserRegisterState>(
         builder: (context, state) {
           if (kDebugMode) {
@@ -80,39 +79,33 @@ class _UserRegistrationViewState extends State<UserRegistrationView> {
                 SizedBox(height: 25.0),
                 buildTextField(
                   controller: nameController,
-                  hintText: 'Enter Name',
-                  onChanged: (value) => context.read<UserRegisterBloc>().add(NameChanged(name: value)),
+                  hintText: 'Enter Name'
                 ),
                 SizedBox(height: 25.0),
                 buildTextField(
                   controller: lastNameController,
-                  hintText: 'Enter Last Name',
-                  onChanged: (value) => context.read<UserRegisterBloc>().add(LastNameChanged(lastName: value)),
+                  hintText: 'Enter Last Name'
                 ),
                 SizedBox(height: 25.0),
                 buildTextField(
                   controller: emailController,
-                  hintText: 'Enter Email',
-                  onChanged: (value) => context.read<UserRegisterBloc>().add(EmailChanged(email: value)),
+                  hintText: 'Enter Email'
                 ),
                 SizedBox(height: 25.0),
                 buildTextField(
                   controller: rfcController,
-                  hintText: 'Enter RFC',
-                  onChanged: (value) => context.read<UserRegisterBloc>().add(RfcChanged(rfc: value)),
+                  hintText: 'Enter RFC'
                 ),
                 SizedBox(height: 25.0),
                 buildTextField(
                   controller: phoneController,
-                  hintText: 'Enter Phone Number',
-                  onChanged: (value) => context.read<UserRegisterBloc>().add(PhoneChanged(phone: value)),
+                  hintText: 'Enter Phone Number'
                 ),
                 SizedBox(height: 25.0),
                 buildTextField(
                   controller: passwordController,
                   hintText: 'Enter Password',
-                  obscureText: true,
-                  onChanged: (value) => context.read<UserRegisterBloc>().add(PasswordChanged(password: value)),
+                  obscureText: true
                 ),
                 SizedBox(height: 25.0),
                 ElevatedButton(
@@ -150,7 +143,7 @@ class _UserRegistrationViewState extends State<UserRegistrationView> {
     required TextEditingController controller,
     required String hintText,
     bool obscureText = false,
-    required ValueChanged<String> onChanged,
+    ValueChanged<String>? onChanged,
   }) {
     return SizedBox(
       width: 300,

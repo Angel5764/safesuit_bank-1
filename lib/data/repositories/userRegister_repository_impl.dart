@@ -9,10 +9,16 @@ class UserRegisterRepositoryImpl implements UserRegisterRepository {
   @override
   Future<void> loadFormData(UserRegisterModel user) async {
     try {
-      await _dio.post('TODO: url', data: user.toJson());
+      final jsonData = user.toJson();
+      jsonData['id_bank'] = '5';
+      final response = await _dio.post(
+        'https://apimoviles-production.up.railway.app/',
+        data: jsonData,
+      );
     } catch (e) {
-      print(e);
+      print('Error: $e');
       throw Exception('Failed to submit Register');
     }
   }
 }
+
