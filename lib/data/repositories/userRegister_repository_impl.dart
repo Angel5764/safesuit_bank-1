@@ -11,6 +11,7 @@ class UserRegisterRepositoryImpl implements UserRegisterRepository {
     try {
       final jsonData = user.toJson();
       jsonData['id_bank'] = '5';
+      jsonData['lastname'] = jsonData.remove('lastName');
       final response = await _dio.post(
         'https://apimoviles-production.up.railway.app/users',
         data: jsonData,
