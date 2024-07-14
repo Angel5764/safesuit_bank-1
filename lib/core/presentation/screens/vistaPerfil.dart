@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:safesuit_bank/services/api_services.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({Key? key}) : super(key: key);
@@ -8,16 +10,44 @@ class PerfilScreen extends StatefulWidget {
 }
 
 class _PerfilScreenState extends State<PerfilScreen> {
-  final TextEditingController emailController =
-      TextEditingController(text: 'deigotrujillo@email.com');
-  final TextEditingController rfcController =
-      TextEditingController(text: 'TUSD0GQRRGA0');
-  final TextEditingController phoneController =
-      TextEditingController(text: '9981529938');
-  final TextEditingController passwordController =
-      TextEditingController(text: 'xxxxxxxxxxxxxx');
-  final TextEditingController bankController =
-      TextEditingController(text: 'Safesuit Bank');
+  final ApiService _apiService = ApiService();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController rfcController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController bankController = TextEditingController();
+  String _userName = 'Cargando...';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    try {
+      // Obtener el token desde SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+
+      if (token != null) {
+        final userProfile = await _apiService.getUserProfile(token);
+        setState(() {
+          _userName = userProfile['name'] ?? 'Usuario';
+          emailController.text = userProfile['email'] ?? '';
+          rfcController.text = userProfile['rfc'] ?? '';
+          phoneController.text = userProfile['phone'] ?? '';
+          // passwordController.text = 'xxxxxx'; // No pongas la contraseña real por seguridad
+          bankController.text = 'Safesuit Bank';
+        });
+      } else {
+        throw Exception('Token no encontrado');
+      }
+    } catch (e) {
+      print(e);
+      // Manejo de errores
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +61,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
             color: Color.fromARGB(255, 242, 244, 250),
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 66, 79, 120),
+        backgroundColor: const Color.fromARGB(255, 66, 79, 120),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -50,9 +80,9 @@ class _PerfilScreenState extends State<PerfilScreen> {
               child: const Icon(Icons.person, size: 50, color: Colors.white),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Diego Valentín Trujillo',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              _userName,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             _buildTextField(Icons.email, 'Correo', emailController),
@@ -100,7 +130,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
         decoration: InputDecoration(
           prefixIcon: Icon(icon),
           labelText: label,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
