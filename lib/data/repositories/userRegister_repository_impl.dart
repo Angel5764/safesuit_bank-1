@@ -12,7 +12,7 @@ class UserRegisterRepositoryImpl implements UserRegisterRepository {
       final jsonData = user.toJson();
       jsonData['id_bank'] = '5';
       final response = await _dio.post(
-        'https://apimoviles-production.up.railway.app/',
+        'https://apimoviles-production.up.railway.app/users',
         data: jsonData,
       );
     } catch (e) {
