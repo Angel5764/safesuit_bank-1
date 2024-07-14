@@ -7,8 +7,9 @@ import 'package:safesuit_bank/core/domain/repositories/retiroqr_repository.dart'
 class RetiroqrRepositoryImpl implements RetiroqrRepository {
   @override
   Future<RetiroqrModel> loadRetiroData() async {
-    final response = await rootBundle.loadString('json_data/retiroqr.json');
-    final data = json.decode(response);
+    final reponse = await rootBundle.loadString(
+        'assets/json_data/retiroqr.json');
+    final data = json.decode(reponse);
     if (kDebugMode) {
       print(data);
     }
