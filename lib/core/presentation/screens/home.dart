@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
 
 import 'package:safesuit_bank/core/presentation/screens/TransSelecionUser.dart';
+import 'package:safesuit_bank/core/presentation/screens/bankCard.dart';
 import 'package:safesuit_bank/core/presentation/screens/movimientos.dart';
 import 'package:safesuit_bank/core/presentation/screens/serviceAgua.dart';
 import 'package:safesuit_bank/core/presentation/screens/serviceCFE.dart';
-
 import 'package:safesuit_bank/core/presentation/screens/serviceTelcel.dart';
+import 'package:safesuit_bank/core/presentation/screens/vistaPerfil.dart';
 import 'package:safesuit_bank/core/presentation/screens/paymentqr.dart';
 import 'package:safesuit_bank/main.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  int _selectedIndex = 0;
+
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController cantRetirarController = TextEditingController();
+  double balance = 500.00;
+
+  void _onCantRetirarChanged(String value) {
+    // Manejar el cambio en cantRetirarController aquí
+    // Puedes actualizar el balance o realizar otras acciones necesarias
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Navegar a la vista de perfil si se selecciona el ícono de persona
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PerfilScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +106,8 @@ class HomeView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            const BankCardWidget(),
+            BankCard(
+            ),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -278,7 +310,7 @@ class HomeView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.more_horiz, size: 40),
+                                Icon(Icons.menu, size: 40),
                                 Text(
                                   'Más',
                                   style: TextStyle(
@@ -293,15 +325,15 @@ class HomeView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 30),
                   const Text(
-                    'Paga tus servicios',
+                    'Servicios',
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -310,22 +342,33 @@ class HomeView extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    TransAgua()), //Aqui va el TransAgua
+                              builder: (context) => const TransAgua(),
+                            ),
                           );
-                          // Acción para el botón de Aguakan
                         },
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                AssetImage('assets/images/logo_aguakan.jpg'),
-                          ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[200],
+                              ),
+                              child: const Icon(
+                                Icons.water,
+                                size: 40,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Agua',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       GestureDetector(
@@ -333,170 +376,95 @@ class HomeView extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TransTelcel()),
+                              builder: (context) => const TransCFE(),
+                            ),
                           );
-                          // Acción para el botón de Telcel
                         },
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                AssetImage('assets/images/logo_telcel.png'),
-                          ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[200],
+                              ),
+                              child: const Icon(
+                                Icons.flash_on,
+                                size: 40,
+                                color: Colors.yellow,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'CFE',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => TransCFE()),
+                            MaterialPageRoute(
+                              builder: (context) => const TransTelcel(),
+                            ),
                           );
                         },
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                AssetImage('assets/images/logo_cfe.jpg'),
-                          ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey[200],
+                              ),
+                              child: const Icon(
+                                Icons.phone_android,
+                                size: 40,
+                                color: Colors.green,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Telcel',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                      height: 50), // Agrega espaciado al final si es necesario
+                  const SizedBox(height: 40),
                 ],
               ),
-            )
+            ),
           ],
         )),
       ),
-      bottomNavigationBar: BottomNavigationBar(items: const [
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Colors.black,
-            ),
-            label: "Home"),
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.credit_card,
-              color: Colors.black,
-            ),
-            label: "Credit_Card"),
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person,
-              color: Colors.black,
-            ),
-            label: "Person"),
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.black,
-            ),
-            label: "Settings")
-      ]),
-    );
-  }
-}
-
-class BankCardWidget extends StatelessWidget {
-  const BankCardWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 180,
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black45,
-            offset: Offset(0, 4),
-            blurRadius: 10.0,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.help),
+            label: 'Ayuda',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
           ),
         ],
-      ),
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.15,
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/patron_logo.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // Encabezado de la tarjeta: Nombre del banco y nivel de usuario
-          const Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: EdgeInsets.only(top: 12.0), // Ajuste según sea necesario
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'SafeSuit Bank',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4), // Ajusta el espacio según sea necesario
-                  Text(
-                    'Visionary',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 15,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Logotipo en la esquina superior derecha
-          Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  top: 12.0), // Ajuste según sea necesario
-              child: Image.asset('assets/images/6404100.png', width: 50),
-            ),
-          ),
-          // Logotipo de Mastercard en la esquina inferior izquierda
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  bottom: 12.0), // Ajuste según sea necesario
-              child: Image.asset('assets/images/master_card.png', width: 80),
-            ),
-          ),
-          // El resto de tus widgets como el saldo y el campo de texto aquí
-          // Asegúrate de que están correctamente posicionados y no se superponen con los nuevos elementos
-          // Puedes necesitar usar más Widgets Align o ajustar el padding de los elementos
-        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }
