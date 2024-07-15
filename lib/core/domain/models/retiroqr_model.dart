@@ -1,19 +1,20 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'retiroqrModel.g.dart';
+
+part 'retiroqr_model.g.dart';
 
 @JsonSerializable()
 class RetiroqrModel {
-  final String username;
-  final double cantRetirar;
+  final String name;
+  final String lastname;
   final double saldoDisponible;
 
   RetiroqrModel({
-    required this.username,
-    required this.cantRetirar,
+    required this.name,
+    required this.lastname,
     required this.saldoDisponible,
   });
 
-  factory RetiroqrModel.fromJson(Map<String, dynamic> json) =>
-      _$RetiroqrModelFromJson(json);
+  factory RetiroqrModel.fromJson(Map<String, dynamic> json) => _$RetiroqrModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$RetiroqrModelToJson(this);
 }

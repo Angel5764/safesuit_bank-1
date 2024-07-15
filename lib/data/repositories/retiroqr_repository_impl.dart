@@ -1,18 +1,20 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:safesuit_bank/core/domain/models/retiroqrModel.dart';
-import 'package:safesuit_bank/core/domain/repositories/retiroqr_repository.dart';
+import 'package:safesuit_bank/core/domain/models/retiroqr_model.dart';
+import 'package:safesuit_bank/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class RetiroqrRepositoryImpl implements RetiroqrRepository {
-  @override
-  Future<RetiroqrModel> loadRetiroData() async {
-    final reponse = await rootBundle.loadString(
-        'assets/json_data/retiroqr.json');
-    final data = json.decode(reponse);
-    if (kDebugMode) {
-      print(data);
+class RetiroqrRepositoryImpl {
+  final ApiService apiService;
+
+  RetiroqrRepositoryImpl({required this.apiService});
+
+  Future<RetiroqrModel> getRetiroData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Token no encontrado');
     }
-    return RetiroqrModel.fromJson(data);
+
+    final response = await apiService.getUserProfile(token);
+    return RetiroqrModel.fromJson(response);
   }
 }

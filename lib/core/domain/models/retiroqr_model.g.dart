@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'retiroqrModel.dart';
+part of 'retiroqr_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -8,14 +8,14 @@ part of 'retiroqrModel.dart';
 
 RetiroqrModel _$RetiroqrModelFromJson(Map<String, dynamic> json) =>
     RetiroqrModel(
-      username: json['username'] as String,
-      cantRetirar: (json['cantRetirar'] as num).toDouble(),
+      name: json['name'] as String,
+      lastname: json['lastname'] as String,
       saldoDisponible: (json['saldoDisponible'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$RetiroqrModelToJson(RetiroqrModel instance) =>
     <String, dynamic>{
-      'username': instance.username,
-      'cantRetirar': instance.cantRetirar,
+      'name': instance.name,
+      'lastname': instance.lastname,
       'saldoDisponible': instance.saldoDisponible,
     };

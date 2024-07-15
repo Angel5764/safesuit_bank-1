@@ -23,4 +23,21 @@ class ApiService {
       throw Exception('Failed to load user profile');
     }
   }
+
+  Future<void> updateUserProfile(String token, Map<String, dynamic> data) async {
+    try {
+      await _dio.patch(
+        '/users',
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to update user profile');
+    }
+  }
 }

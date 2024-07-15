@@ -1,33 +1,32 @@
-import 'package:safesuit_bank/core/domain/models/retiroqrModel.dart';
-import 'package:safesuit_bank/core/domain/repositories/retiroqr_repository.dart';
+import 'package:safesuit_bank/core/domain/models/retiroqr_model.dart';
+import 'package:safesuit_bank/data/repositories/retiroqr_repository_impl.dart';
 
 class LoadRetiroData {
-  final RetiroqrRepository repository;
+  final RetiroqrRepositoryImpl repository;
 
   LoadRetiroData(this.repository);
 
   Future<RetiroqrModel> call() async {
-    final retiroData = await repository.loadRetiroData();
+    final retiroData = await repository.getRetiroData();
 
-    // Validaciones
-    if (retiroData.username.isEmpty) {
-      throw Exception("El nombre de usuario no puede estar vacío");
+    if (retiroData.name.isEmpty) {
+      throw Exception("El nombre no puede estar vacío");
     }
-    if (retiroData.username.length < 3) {
-      throw Exception("El nombre de usuario debe tener al menos 3 caracteres");
+    if (retiroData.lastname.isEmpty) {
+      throw Exception("El apellido no puede estar vacío");
     }
-    if (!_esCaracteres(retiroData.username)) {
-      throw Exception("El nombre de usuario solo puede contener letras");
+    if (retiroData.name.length < 3 || retiroData.lastname.length < 3) {
+      throw Exception("El nombre y apellido deben tener al menos 3 caracteres");
     }
-    if (retiroData.cantRetirar < 0) {
-      throw Exception("La cantidad a retirar debe ser mayor a 0");
+    if (!_esCaracteres(retiroData.name) || !_esCaracteres(retiroData.lastname)) {
+      throw Exception("El nombre y apellido solo pueden contener letras");
     }
 
     return retiroData;
   }
 
-  bool _esCaracteres(String str) {
-    final alphaRegex = RegExp(r'^[a-zA-Z\s]+$');
-    return alphaRegex.hasMatch(str);
+  bool _esCaracteres(String input) {
+    final regExp = RegExp(r'^[a-zA-Z]+$');
+    return regExp.hasMatch(input);
   }
 }

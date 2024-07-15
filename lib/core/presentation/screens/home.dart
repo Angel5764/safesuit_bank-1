@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:safesuit_bank/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:safesuit_bank/core/presentation/screens/TransSelecionUser.dart';
 import 'package:safesuit_bank/core/presentation/screens/bankCard.dart';
 import 'package:safesuit_bank/core/presentation/screens/movimientos.dart';
@@ -19,14 +20,33 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
+  String _userName = 'Cargando...';
+  String _userEmail = 'Cargando...';
 
-  final TextEditingController userNameController = TextEditingController();
-  final TextEditingController cantRetirarController = TextEditingController();
-  double balance = 500.00;
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
 
-  void _onCantRetirarChanged(String value) {
-    // Manejar el cambio en cantRetirarController aquí
-    // Puedes actualizar el balance o realizar otras acciones necesarias
+  Future<void> _fetchUserProfile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+
+      if (token != null) {
+        final apiService = ApiService();
+        final userProfile = await apiService.getUserProfile(token);
+        setState(() {
+          _userName = userProfile['name'] ?? 'Usuario';
+          _userEmail = userProfile['email'] ?? 'No email found';
+        });
+      } else {
+        throw Exception('Token no encontrado');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _onItemTapped(int index) {
@@ -34,7 +54,6 @@ class _HomeViewState extends State<HomeView> {
       _selectedIndex = index;
     });
 
-    // Navegar a la vista de perfil si se selecciona el ícono de persona
     if (index == 2) {
       Navigator.push(
         context,
@@ -48,13 +67,13 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(title: const Text("Inicio")),
       drawer: NavigationDrawer(children: [
-        const UserAccountsDrawerHeader(
-          accountName: Text("Brandon"),
-          accountEmail: Text("Prueba@gmail.com"),
-          currentAccountPicture: CircleAvatar(
+        UserAccountsDrawerHeader(
+          accountName: Text(_userName),
+          accountEmail: Text(_userEmail),
+          currentAccountPicture: const CircleAvatar(
             child: ClipOval(child: Icon(Icons.person)),
           ),
-          decoration: BoxDecoration(color: Colors.purple),
+          decoration: const BoxDecoration(color: Colors.purple),
         ),
         const ListTile(
           leading: Icon(Icons.help),
@@ -97,17 +116,16 @@ class _HomeViewState extends State<HomeView> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Bienvenido Angel Zea',
-              style: TextStyle(
+            Text(
+              'Bienvenido $_userName',
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 30),
-            BankCard(
-            ),
+            BankCard(),
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
