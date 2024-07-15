@@ -1,12 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:safesuit_bank/core/domain/usecases/load_retiroqr_data.dart';
-import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_bloc.dart';
-import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_event.dart';
-import 'package:safesuit_bank/core/presentation/bloc/retiroqr/retiroqr_state.dart';
-import 'package:safesuit_bank/core/presentation/screens/QRCodeScreen.dart';
-import 'package:safesuit_bank/data/repositories/retiroqr_repository_impl.dart';
+import 'package:safesuit_bank/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RetirarQR extends StatefulWidget {
   const RetirarQR({super.key});
@@ -16,122 +10,127 @@ class RetirarQR extends StatefulWidget {
 }
 
 class _RetirarQRState extends State<RetirarQR> {
-  late RetiroqrRepositoryImpl _repository;
-  late LoadRetiroData _loadRetiroData;
+  String _name = 'Cargando...';
+  String _lastname = 'Cargando...';
+  double _saldoDisponible = 0.0;
+  final TextEditingController cantRetirarController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _repository = RetiroqrRepositoryImpl();
-    _loadRetiroData = LoadRetiroData(_repository);
+    _fetchUserProfile();
   }
 
-  Future<void> _validateAndNavigate(BuildContext context) async {
+  Future<void> _fetchUserProfile() async {
     try {
-      final retiroData = await _loadRetiroData.call();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => QRCodeScreen()),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+
+      if (token != null) {
+        final apiService = ApiService();
+        final userProfile = await apiService.getUserProfile(token);
+        setState(() {
+          _name = userProfile['name'] ?? 'Usuario';
+          _lastname = userProfile['lastname'] ?? 'Apellido';
+          _saldoDisponible = userProfile['saldoDisponible'] ?? 0.0;
+        });
+      } else {
+        throw Exception('Token no encontrado');
+      }
     } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
+        SnackBar(content: Text('Error al obtener el perfil del usuario')),
       );
     }
   }
 
+  void _validateAndNavigate(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => QRCodeScreen()),
+    );
+  }
+
+  void _onCantRetirarChanged(String value) {
+    // Aquí puedes actualizar el estado si es necesario
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RetiroBloc(_loadRetiroData)..add(LoadRetiroDataEvent()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Retirar dinero con QR',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 242, 244, 250)),
-          ),
-          backgroundColor: const Color.fromARGB(255, 66, 79, 120),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Retirar dinero con QR',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 242, 244, 250)),
         ),
-        body: SingleChildScrollView(
-          child: BlocBuilder<RetiroBloc, RetiroState>(
-            builder: (context, state) {
-              if (kDebugMode) {
-                print(state.toString());
-              }
-
-              TextEditingController cantRetirarController =
-                  TextEditingController(text: state.cantRetirar.toString());
-
-              return Center(
+        backgroundColor: const Color.fromARGB(255, 66, 79, 120),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              BankCardWidget(
+                name: _name,
+                lastname: _lastname,
+                saldoDisponible: _saldoDisponible,
+                cantRetirarController: cantRetirarController,
+                onCantRetirarChanged: _onCantRetirarChanged,
+              ),
+              const SizedBox(height: 20),
+              const Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    BankCardWidget(
-                      userName: state.username,
-                      saldoDisponible: state.saldoDisponible,
-                      cantRetirarController: cantRetirarController,
-                      onCantRetirarChanged: (value) {
-                        // Actualiza el estado del RetiroBloc aquí si es necesario
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    const Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'Genera tu código QR para retirar\n dinero sin tu tarjeta:',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.lightBlue,
-                              fontSize: 21,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      'Genera tu código QR para retirar\n dinero sin tu tarjeta:',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.lightBlue,
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    InkWell(
-                      onTap: () {
-                        _validateAndNavigate(context);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(15),
-                        decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.qr_code,
-                              size: 35,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              'Generar QR',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
                   ],
                 ),
-              );
-            },
+              ),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () {
+                  _validateAndNavigate(context);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.qr_code,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        'Generar QR',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
           ),
         ),
       ),
@@ -140,14 +139,16 @@ class _RetirarQRState extends State<RetirarQR> {
 }
 
 class BankCardWidget extends StatelessWidget {
-  final String userName;
+  final String name;
+  final String lastname;
   final double saldoDisponible;
   final TextEditingController cantRetirarController;
   final ValueChanged<String> onCantRetirarChanged;
 
   BankCardWidget({
     Key? key,
-    required this.userName,
+    required this.name,
+    required this.lastname,
     required this.saldoDisponible,
     required this.cantRetirarController,
     required this.onCantRetirarChanged,
@@ -191,7 +192,7 @@ class BankCardWidget extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 10),
               Text(
-                userName,
+                '$name $lastname',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -211,6 +212,8 @@ class BankCardWidget extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 style: const TextStyle(color: Colors.white),
                 decoration: const InputDecoration(
+                  hintText: '00.00',
+                  hintStyle: TextStyle(color: Colors.grey),
                   prefixText: '\$ ',
                   prefixStyle: TextStyle(color: Colors.white),
                   enabledBorder: UnderlineInputBorder(
@@ -241,6 +244,20 @@ class BankCardWidget extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class QRCodeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('QR Code'),
+      ),
+      body: Center(
+        child: Text('QR Code Screen'),
       ),
     );
   }

@@ -26,7 +26,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
 
   Future<void> _fetchUserProfile() async {
     try {
-      // Obtener el token desde SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('auth_token');
 
@@ -37,7 +36,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
           emailController.text = userProfile['email'] ?? '';
           rfcController.text = userProfile['rfc'] ?? '';
           phoneController.text = userProfile['phone'] ?? '';
-          // passwordController.text = 'xxxxxx'; // No pongas la contraseña real por seguridad
+          passwordController.text = 'xxxxxxxxxxx';
           bankController.text = 'Safesuit Bank';
         });
       } else {
@@ -45,7 +44,35 @@ class _PerfilScreenState extends State<PerfilScreen> {
       }
     } catch (e) {
       print(e);
-      // Manejo de errores
+    }
+  }
+
+  Future<void> _updateUserProfile() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('auth_token');
+
+      if (token != null) {
+        final updateData = {
+          'email': emailController.text,
+          'rfc': rfcController.text,
+          'phone': phoneController.text,
+          'password': passwordController.text,
+        };
+
+        await _apiService.updateUserProfile(token, updateData);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Perfil actualizado con éxito')),
+        );
+      } else {
+        throw Exception('Token no encontrado');
+      }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al actualizar el perfil')),
+      );
     }
   }
 
@@ -88,18 +115,17 @@ class _PerfilScreenState extends State<PerfilScreen> {
             _buildTextField(Icons.email, 'Correo', emailController),
             _buildTextField(Icons.description, 'RFC', rfcController),
             _buildTextField(Icons.phone, 'Teléfono', phoneController),
-            _buildTextField(Icons.lock, 'Contraseña', passwordController,
+            _buildTextFieldRead(Icons.lock, 'Contraseña', passwordController,
                 obscureText: true),
-            _buildTextField(
+            _buildTextFieldRead(
               Icons.account_balance,
               'Banco',
               bankController,
+              
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Funcionalidad del botón Guardar
-              },
+              onPressed: _updateUserProfile,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF43A047), // Color del botón
                 padding:
@@ -127,6 +153,24 @@ class _PerfilScreenState extends State<PerfilScreen> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon),
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+    );
+  }
+
+    Widget _buildTextFieldRead(IconData icon, String label,
+      TextEditingController controller,
+      {bool obscureText = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        obscureText: obscureText,
+        readOnly: true,
         decoration: InputDecoration(
           prefixIcon: Icon(icon),
           labelText: label,
