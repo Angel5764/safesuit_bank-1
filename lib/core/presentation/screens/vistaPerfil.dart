@@ -30,7 +30,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
       final token = prefs.getString('auth_token');
 
       if (token != null) {
-        final userProfile = await _apiService.getUserProfile(token);
+        final userProfile = (await _apiService.getUserProfile(token))["data"];
         setState(() {
           _userName = userProfile['name'] ?? 'Usuario';
           emailController.text = userProfile['email'] ?? '';
