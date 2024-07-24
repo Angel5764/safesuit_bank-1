@@ -3,35 +3,30 @@ import 'package:equatable/equatable.dart';
 import 'package:safesuit_bank/core/domain/models/pagaraguakanModel.dart';
 
 class PagaraguakanState extends Equatable {
-  final String NIA;
-  final double Importe;
-  final String errorMessage;
-
-  const PagaraguakanState({
-    this.NIA = '',
-    this.Importe = 0.0,
-    this.errorMessage = '',
-  });
-
-  factory PagaraguakanState.fromModel(pagaraguakanModel model) {
-    return PagaraguakanState(
-      NIA: model.NIA,
-      Importe: model.Importe,
-    );
-  }
-
-  PagaraguakanState copyWith({
-    String? NIA,
-    double? Importe,
-    String? errorMessage,
-  }) {
-    return PagaraguakanState(
-      NIA: NIA ?? this.NIA,
-      Importe: Importe ?? this.Importe,
-      errorMessage: errorMessage ?? this.errorMessage,
-    );
-  }
+  const PagaraguakanState();
 
   @override
-  List<Object> get props => [NIA, Importe, errorMessage];
+  List<Object> get props => [];
+}
+
+class PagaraguakanInitial extends PagaraguakanState {}
+
+class PagaraguakanILoading extends PagaraguakanState {}
+
+class PagaraguakanAuthenticated extends PagaraguakanState {
+  final pagaraguakanModel pagar;
+
+  const PagaraguakanAuthenticated({required this.pagar});
+
+  @override
+  List<Object> get props => [pagar];
+}
+
+class PagaraguakanAuthenticationFailure extends PagaraguakanState {
+  final String error;
+
+  const PagaraguakanAuthenticationFailure({required this.error});
+
+  @override
+  List<Object> get props => [error];
 }
