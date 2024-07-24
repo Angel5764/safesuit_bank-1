@@ -35,17 +35,17 @@ class _HomeViewState extends State<HomeView> {
       final token = prefs.getString('auth_token');
 
       if (token != null) {
-        print("Token found: $token"); 
+        print("Token found: $token");
         final apiService = ApiService();
         final userProfile = await apiService.getUserProfile(token);
         final data = userProfile['data'];
         setState(() {
           _userName = data['name'] ?? 'Usuario';
           _userEmail = data['email'] ?? 'No email found';
-          print("User profile fetched successfully: $_userName, $_userEmail"); 
+          print("User profile fetched successfully: $_userName, $_userEmail");
         });
       } else {
-        print("Token not found"); 
+        print("Token not found");
         throw Exception('Token no encontrado');
       }
     } catch (e) {

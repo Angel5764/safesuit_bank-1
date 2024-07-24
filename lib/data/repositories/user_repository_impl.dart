@@ -22,17 +22,19 @@ class UserRepositoryImpl implements UserRepository {
       print(response);
 
       if (response.statusCode == 200) {
-        // Parse the response data to get the token
-        final data = response.data;
-        final token = data['access_token']; // Asegúrate de que la clave 'token' sea correcta
+      final data = response.data;
+      final token = data['access_token'];
+      print("Token recibido: $token");
 
-        // Save the token in SharedPreferences
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('auth_token', token);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_token', token);
 
-        return UserModel.fromJson(data);
-      } else {
-        throw Exception('Error en la autenticación');
+      final savedToken = prefs.getString('auth_token');
+      print("Token guardado: $savedToken");
+
+      return UserModel.fromJson(data);
+    } else {
+      throw Exception('Error en la autenticación');
       }
   }
 }

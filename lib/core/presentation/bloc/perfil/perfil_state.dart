@@ -11,7 +11,7 @@ class PerfilState extends Equatable {
   final bool isUpdated;
 
   const PerfilState({
-    this.userName = 'Cargando...',
+    this.userName = '',
     this.email = '',
     this.rfc = '',
     this.phone = '',

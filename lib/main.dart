@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_auth/local_auth.dart';
@@ -6,9 +5,11 @@ import 'package:safesuit_bank/core/domain/usecases/load_user_data.dart';
 import 'package:safesuit_bank/core/presentation/bloc/user/user_bloc.dart';
 import 'package:safesuit_bank/core/presentation/bloc/user/user_event.dart';
 import 'package:safesuit_bank/core/presentation/bloc/user/user_state.dart';
-import 'package:safesuit_bank/core/presentation/screens/home.dart';
 import 'package:safesuit_bank/core/presentation/screens/UserRegistration.dart';
+import 'package:safesuit_bank/core/presentation/screens/home.dart';
+import 'package:safesuit_bank/core/presentation/bloc/perfil/perfil_bloc.dart';
 import 'package:safesuit_bank/data/repositories/user_repository_impl.dart';
+import 'package:safesuit_bank/services/api_services.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +21,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Safe Suit Bank',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(),
-      home: BlocProvider(
-        create: (context) => UserBloc(userRepository: UserRepositoryImpl()),
-        child: const MyHomePage(title: ''),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UserBloc(userRepository: UserRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => PerfilBloc(ApiService()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Safe Suit Bank',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(),
+        home: const MyHomePage(title: ''),
       ),
     );
   }
@@ -35,6 +43,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -54,22 +63,17 @@ class _MyHomePageState extends State<MyHomePage> {
             stickyAuth: true, useErrorDialogs: true),
       );
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      print(e);
     }
     if (authenticated) {
       Navigator.pushReplacement<void, void>(
-        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute<void>(
           builder: ((context) => const HomeView()),
         ),
       );
     } else {
-      if (kDebugMode) {
-        print("fallo auth");
-      }
+      print("fallo auth");
     }
   }
 
@@ -147,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           context: context,
                         ),
                       );
-                      Navigator.pushReplacement(
+                      Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomeView()));
