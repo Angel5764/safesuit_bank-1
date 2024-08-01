@@ -3,14 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pagarcfeModel.g.dart';
 
 @JsonSerializable()
-class pagartelcelModel{
+class pagarcfeModel{
   final String Numservices;
   final double Importe;
 
-  pagartelcelModel ({required this.Numservices,
+  pagarcfeModel ({required this.Numservices,
     required this.Importe
   });
   
-  factory pagartelcelModel.fromJson(Map<String, dynamic> json) => _$pagarcfeModelFromJson(json);
+  factory pagarcfeModel.fromJson(Map<String, dynamic> json) => _$pagarcfeModelFromJson(json);
   Map<String, dynamic> toJson() => _$pagarcfeModelToJson(this);
 }

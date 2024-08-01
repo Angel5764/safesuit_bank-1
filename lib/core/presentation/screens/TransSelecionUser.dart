@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:safesuit_bank/core/domain/usecases/load_trans_data.dart';
 import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_event.dart';
 import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_state.dart' as bstate;
+import 'package:safesuit_bank/core/presentation/screens/agregaUsuario.dart';
 import 'package:safesuit_bank/data/repositories/transfer_repository_impl.dart';
 import '../bloc/transferencia/trans_bloc.dart';
 import 'package:safesuit_bank/core/presentation/screens/home.dart';
@@ -64,7 +65,12 @@ class _TransferenciasPageState extends State<TransferenciasPage> {
             const SizedBox(height: 59.0),
             ElevatedButton(
               onPressed: () {
-                // Lógica para agregar un nuevo usuario
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddUserPage(),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: const Color.fromARGB(255, 0, 43, 135),

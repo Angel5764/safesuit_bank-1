@@ -8,8 +8,6 @@ class TransferRepositoryImpl implements TransRepository{
   Future<TransferModel> loadFormData() async {
     final response = await rootBundle.loadString('/json_data/transfer.json');
     final data = json.decode(response);
-    print("JSON");
-    print(data);
     return TransferModel.fromJson(data);
   }
 }
