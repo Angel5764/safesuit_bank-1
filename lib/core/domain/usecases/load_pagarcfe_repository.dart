@@ -6,7 +6,7 @@ class LoadPagarcfeData {
 
   LoadPagarcfeData(this.repository);
 
-  Future<pagartelcelModel> call() async {
+  Future<pagarcfeModel> call() async {
     final pagarCfeData = await repository.loadFormData();
 
     // Validaciones

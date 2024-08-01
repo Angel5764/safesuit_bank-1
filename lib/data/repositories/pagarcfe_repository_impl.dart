@@ -5,10 +5,10 @@ import 'package:safesuit_bank/core/domain/repositories/pagarcfe_repository.dart'
 
 class PagarcfeRepositoryImpl implements PagarcfeRepository{
   @override
-  Future<pagartelcelModel> loadFormData() async {
+  Future<pagarcfeModel> loadFormData() async {
     final response = await rootBundle.loadString('json_data/pagarcfe.json');
     final data = json.decode(response);
     print(data);
-    return pagartelcelModel.fromJson(data);
+    return pagarcfeModel.fromJson(data);
   }
 }

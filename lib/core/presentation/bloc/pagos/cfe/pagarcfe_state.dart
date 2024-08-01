@@ -13,7 +13,7 @@ class PagarcfeState extends Equatable {
     this.errorMessage = '',
   });
 
-  factory PagarcfeState.fromModel(pagartelcelModel model) {
+  factory PagarcfeState.fromModel(pagarcfeModel model) {
     return PagarcfeState(
       Numservices: model.Numservices,
       Importe: model.Importe,
