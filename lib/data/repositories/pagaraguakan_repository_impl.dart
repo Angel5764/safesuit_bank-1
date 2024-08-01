@@ -2,13 +2,49 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:safesuit_bank/core/domain/models/pagaraguakanModel.dart';
 import 'package:safesuit_bank/core/domain/repositories/pagaraguakan_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PagaraguakanRepositoryImpl implements PagaraguakanRepository{
+class PagaraguakanRepositoryImpl implements PagaraguakanRepository {
+  final Dio _dio = Dio();
+
   @override
-  Future<pagaraguakanModel> loadFormData() async {
-    final response = await rootBundle.loadString('json_data/pagaraguakan.json');
-    final data = json.decode(response);
-    print(data);
-    return pagaraguakanModel.fromJson(data);
+  Future<pagaraguakanModel> loadFormData(
+      {required String NIA, required double Importe}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+    final cuentaresponse = await _dio.get(
+      'https://apimoviles-production.up.railway.app/accounts/me',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    print(cuentaresponse.data);
+    final info = cuentaresponse.data["data"];
+    final id = info["id"];
+    final idUser = info["id_user"];
+
+    print("id: $id, idUser: $idUser");
+
+    final response = await _dio.post(
+      'https://apimoviles-production.up.railway.app/log-services',
+      data: {
+        'id_service': "11",
+        'id_users': idUser,
+        'id_account': id,
+        'amount': Importe,
+        'reference': NIA
+      },
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+    print(response.data);
+
+    return pagaraguakanModel.fromJson(response.data);
   }
 }
