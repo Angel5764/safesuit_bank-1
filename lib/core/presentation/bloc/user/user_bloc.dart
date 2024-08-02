@@ -22,7 +22,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         password: event.password,
       );
       emit(UserAuthenticated(user: user));
-      // Navegar a la siguiente pantalla
       Navigator.of(event.context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MyApp()),
       );

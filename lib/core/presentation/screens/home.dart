@@ -35,17 +35,21 @@ class _HomeViewState extends State<HomeView> {
       final token = prefs.getString('auth_token');
 
       if (token != null) {
+        print("Token found: $token");
         final apiService = ApiService();
         final userProfile = await apiService.getUserProfile(token);
+        final data = userProfile['data'];
         setState(() {
-          _userName = userProfile['name'] ?? 'Usuario';
-          _userEmail = userProfile['email'] ?? 'No email found';
+          _userName = data['name'] ?? 'Usuario';
+          _userEmail = data['email'] ?? 'No email found';
+          print("User profile fetched successfully: $_userName, $_userEmail");
         });
       } else {
+        print("Token not found");
         throw Exception('Token no encontrado');
       }
     } catch (e) {
-      print(e);
+      print("Error fetching user profile: $e");
     }
   }
 
@@ -73,7 +77,7 @@ class _HomeViewState extends State<HomeView> {
           currentAccountPicture: const CircleAvatar(
             child: ClipOval(child: Icon(Icons.person)),
           ),
-          decoration: const BoxDecoration(color: Colors.purple),
+          decoration: const BoxDecoration(color: Color.fromARGB(255, 23, 36, 105)),
         ),
         const ListTile(
           leading: Icon(Icons.help),
