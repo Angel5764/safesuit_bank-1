@@ -2,47 +2,65 @@
 
 import 'package:equatable/equatable.dart';
 
-abstract class TransEvent extends Equatable {
-  const TransEvent();
+abstract class TransferEvent extends Equatable {
+  const TransferEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadTransDataEvent extends TransEvent {}
+class LoadTransferDataEvent extends TransferEvent {}
 
-class numbercardtransferChanged extends TransEvent {
-  final String numbercardtransfer;
+class UserIdTransferChanged extends TransferEvent {
+  final int idUser;
 
-  const numbercardtransferChanged(this.numbercardtransfer);
+  const UserIdTransferChanged(this.idUser);
 
   @override
-  List<Object> get props => [numbercardtransfer];
+  List<Object> get props => [idUser];
 }
 
-class ownertransferChanged extends TransEvent {
-  final String ownertransfer;
+class NicknameTransferChanged extends TransferEvent {
+  final String nickname;
 
-  const ownertransferChanged(this.ownertransfer);
+  const NicknameTransferChanged(this.nickname);
 
   @override
-  List<Object> get props => [ownertransfer];
+  List<Object> get props => [nickname];
 }
 
-class bankNametransferChanged extends TransEvent {
-  final String bankNametransfer;
+class EmailTransferChanged extends TransferEvent {
+  final String email;
 
-  const bankNametransferChanged(this.bankNametransfer);
+  const EmailTransferChanged(this.email);
 
   @override
-  List<Object> get props => [bankNametransfer];
+  List<Object> get props => [email];
 }
 
-class amountransferChanged extends TransEvent {
-  final double amountransfer;
+class PhoneTransferChanged extends TransferEvent {
+  final String phone;
 
-  const amountransferChanged(this.amountransfer);
+  const PhoneTransferChanged(this.phone);
 
   @override
-  List<Object> get props => [amountransfer];
+  List<Object> get props => [phone];
+}
+
+class BankNameTransferChanged extends TransferEvent {
+  final String bankName;
+
+  const BankNameTransferChanged(this.bankName);
+
+  @override
+  List<Object> get props => [bankName];
+}
+
+class AccountTransferChanged extends TransferEvent {
+  final String account;
+
+  const AccountTransferChanged(this.account);
+
+  @override
+  List<Object> get props => [account];
 }

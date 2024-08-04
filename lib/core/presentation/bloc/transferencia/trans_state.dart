@@ -2,41 +2,30 @@ import 'package:equatable/equatable.dart';
 import 'package:safesuit_bank/core/domain/models/transferModel.dart';
 
 class TransState extends Equatable {
-  final String numbercardtransfer;
-  final String ownertransfer;
-  final String bankNametransfer;
-  final double amountransfer;
+  final List<TransferModel> transfers;
 
   const TransState({
-    this.numbercardtransfer = '',
-    this.ownertransfer = "",
-    this.bankNametransfer = "",
-    this.amountransfer = 5000,
+    this.transfers = const [],
   });
 
   TransState copyWith({
-    String? numbercardtransfer,
-    String? ownertransfer,
-    String? bankNametransfer,
-    double? amountransfer,
+    List<TransferModel>? transfers, required int id,
   }) {
     return TransState(
-      numbercardtransfer: numbercardtransfer ?? this.numbercardtransfer,
-      ownertransfer: ownertransfer ?? this.ownertransfer,
-      bankNametransfer: bankNametransfer ?? this.bankNametransfer,
-      amountransfer: amountransfer ?? this.amountransfer,
+      transfers: transfers ?? this.transfers,
     );
   }
 
   @override
-  List<Object> get props => [numbercardtransfer, ownertransfer, bankNametransfer, amountransfer];
+  List<Object> get props => [transfers];
 
   factory TransState.fromModel(TransferModel model) {
     return TransState(
-      numbercardtransfer: model.numbercardtransfer,
-      ownertransfer: model.ownertransfer,
-      bankNametransfer: model.bankNametransfer,
-      amountransfer: model.amountransfer
+      transfers: [model], // Aquí se usa una lista, pero puedes ajustar
     );
+  }
+
+  factory TransState.empty() {
+    return const TransState(transfers: []);
   }
 }

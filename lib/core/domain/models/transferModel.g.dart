@@ -8,16 +8,22 @@ part of 'transferModel.dart';
 
 TransferModel _$TransferModelFromJson(Map<String, dynamic> json) =>
     TransferModel(
-      numbercardtransfer: json['numbercardtransfer'] as String,
-      ownertransfer: json['ownertransfer'] as String,
-      bankNametransfer: json['bankNametransfer'] as String,
-      amountransfer: (json['amountransfer'] as num).toDouble(),
+      id: (json['id'] as num).toInt(),
+      id_user: (json['id_user'] as num).toInt(),
+      nickname: json['nickname'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      bankname: json['bankname'] as String,
+      account: json['account'] as String,
     );
 
 Map<String, dynamic> _$TransferModelToJson(TransferModel instance) =>
     <String, dynamic>{
-      'numbercardtransfer': instance.numbercardtransfer,
-      'ownertransfer': instance.ownertransfer,
-      'bankNametransfer': instance.bankNametransfer,
-      'amountransfer': instance.amountransfer,
+      'id': instance.id,
+      'id_user': instance.id_user,
+      'nickname': instance.nickname,
+      'email': instance.email,
+      'phone': instance.phone,
+      'bankname': instance.bankname,
+      'account': instance.account,
     };
