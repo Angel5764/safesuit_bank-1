@@ -8,38 +8,22 @@ import 'package:safesuit_bank/core/presentation/bloc/user/user_event.dart';
 import 'package:safesuit_bank/core/presentation/bloc/user/user_state.dart';
 import 'package:safesuit_bank/core/presentation/screens/home.dart';
 import 'package:safesuit_bank/core/presentation/screens/UserRegistration.dart';
-import 'package:safesuit_bank/main.dart';
 
-class LoginPage
-    extends StatefulWidget {
-  const LoginPage(
-      {super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() =>
-      _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState
-    extends State<LoginPage> {
-  bool
-      _isChecked =
-      false;
-  final LocalAuthentication
-      _localAuthentication =
-      LocalAuthentication();
-  final TextEditingController
-      _phoneController =
-      TextEditingController();
-  final TextEditingController
-      _passwordController =
-      TextEditingController();
+class _LoginPageState extends State<LoginPage> {
+  bool _isChecked = false;
+  final LocalAuthentication _localAuthentication = LocalAuthentication();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  Future<void>
-      _auth() async {
-    bool
-        authenticated =
-        false;
+  Future<void> _auth() async {
+    bool authenticated = false;
     try {
       authenticated = await _localAuthentication.authenticate(
         localizedReason: "Autenticate para acceder",
@@ -51,12 +35,10 @@ class _LoginPageState
       }
     }
     if (authenticated) {
-      Navigator.pushReplacement<void, void>(
-        // ignore: use_build_context_synchronously
+      // Navegación directa al HomeView si la autenticación biométrica es exitosa
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute<void>(
-          builder: ((context) => const HomeView()),
-        ),
+        MaterialPageRoute(builder: (context) => const HomeView()),
       );
     } else {
       if (kDebugMode) {
@@ -65,15 +47,42 @@ class _LoginPageState
     }
   }
 
+  void _onLoginButtonPressed() {
+    final phone = _phoneController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (LoadUserData.validatePhoneNumber(phone) && LoadUserData.validatePassword(password)) {
+      // Emite el evento de inicio de sesión al BLoC
+      BlocProvider.of<UserBloc>(context).add(
+        LoginButtonPressed(
+          phoneNumber: phone,
+          password: password,
+          context: context,
+        ),
+      );
+    } else {
+      // Muestra un mensaje de error si las credenciales no son válidas
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Número de teléfono o contraseña inválidos')),
+      );
+    }
+  }
+
   @override
-  Widget
-      build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state is UserAuthenticated) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const MyApp()),
+            // Navega a HomeView cuando el usuario está autenticado
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeView()),
+            );
+          } else if (state is UserAuthenticationFailure) {
+            // Muestra un mensaje de error si el inicio de sesión falla
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
             );
           }
         },
@@ -108,6 +117,7 @@ class _LoginPageState
                 TextField(
                   decoration: const InputDecoration(hintText: "Numero de telefono"),
                   controller: _phoneController,
+                  keyboardType: TextInputType.phone,
                 ),
                 TextField(
                   decoration: const InputDecoration(hintText: "Contraseña"),
@@ -129,22 +139,7 @@ class _LoginPageState
                   ],
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (LoadUserData.validatePhoneNumber(_phoneController.text) && LoadUserData.validatePassword(_passwordController.text)) {
-                      BlocProvider.of<UserBloc>(context).add(
-                        LoginButtonPressed(
-                          phoneNumber: _phoneController.text,
-                          password: _passwordController.text,
-                          context: context,
-                        ),
-                      );
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeView()));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Número de teléfono o contraseña inválidos')),
-                      );
-                    }
-                  },
+                  onPressed: _onLoginButtonPressed,
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
                   ),
@@ -155,9 +150,7 @@ class _LoginPageState
                 ),
                 const Text("\nO"),
                 IconButton(
-                  onPressed: () => {
-                    _auth(),
-                  },
+                  onPressed: _auth, // Llama al método de autenticación biométrica
                   icon: const Icon(
                     Icons.fingerprint,
                     size: 50,
@@ -168,7 +161,7 @@ class _LoginPageState
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UserRegistrationView(),
+                        builder: (context) => const UserRegistrationView(),
                       ),
                     );
                   },

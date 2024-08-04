@@ -7,8 +7,6 @@ class LoadUserData {
       lastName: "Cadenas",
       telefono: "1223344556",
       email: "sergio@gmail.com",
-      password: "asasf",
-      money: 20000,
     );
 
     // Validaciones
@@ -24,12 +22,12 @@ class LoadUserData {
     if (userData.email.isEmpty || !_esEmailValido(userData.email)) {
       throw Exception("El correo electrónico está vacío o no es válido");
     }
-    if (userData.password.isEmpty || userData.password.length < 6) {
-      throw Exception("La contraseña no puede estar vacía y debe tener al menos 6 caracteres");
-    }
-    if (!_esDouble(userData.money) || userData.money <= 0) {
-      throw Exception("El monto de dinero debe ser un número positivo válido");
-    }
+    // if (userData.password.isEmpty || userData.password.length < 6) {
+    //   throw Exception("La contraseña no puede estar vacía y debe tener al menos 6 caracteres");
+    // }
+    // if (!_esDouble(userData.money) || userData.money <= 0) {
+    //   throw Exception("El monto de dinero debe ser un número positivo válido");
+    // }
 
     return userData;
   }
