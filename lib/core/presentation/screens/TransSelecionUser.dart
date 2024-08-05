@@ -14,9 +14,12 @@ class TransUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repository = TransferRepositoryImpl();
+    final loadTransData = LoadTransData(repository);
+
     return BlocProvider(
-      create: (context) => TransferenciaBloc(LoadTransData(TransferRepositoryImpl()))
-        ..add(LoadTransferDataEvent()), // Inicia la carga de datos al crear el BLoC
+      create: (context) => TransferenciaBloc(loadTransData, repository)
+        ..add(LoadTransferDataEvent()),
       child: const TransferenciasPage(),
     );
   }

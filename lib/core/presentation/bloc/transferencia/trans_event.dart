@@ -1,5 +1,3 @@
-// ignore_for_file: camel_case_types
-
 import 'package:equatable/equatable.dart';
 
 abstract class TransferEvent extends Equatable {
@@ -63,4 +61,23 @@ class AccountTransferChanged extends TransferEvent {
 
   @override
   List<Object> get props => [account];
+}
+
+class AddTransferEvent extends TransferEvent {
+  final String nickname;
+  final String email;
+  final String phone;
+  final String bankname;
+  final String account;
+
+  const AddTransferEvent({
+    required this.nickname,
+    required this.email,
+    required this.phone,
+    required this.bankname,
+    required this.account,
+  });
+
+  @override
+  List<Object> get props => [nickname, email, phone, bankname, account];
 }

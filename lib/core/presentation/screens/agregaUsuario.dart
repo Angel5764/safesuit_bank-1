@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_bloc.dart';
+import 'package:safesuit_bank/core/presentation/bloc/transferencia/trans_event.dart';
+import 'package:safesuit_bank/core/domain/usecases/load_trans_data.dart';
 import 'package:safesuit_bank/core/presentation/screens/TransSelecionUser.dart';
+import 'package:safesuit_bank/data/repositories/transfer_repository_impl.dart';
 
 class AddUserPage extends StatelessWidget {
   const AddUserPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const AddUserForm();
+    final repository = TransferRepositoryImpl();
+    final loadTransData = LoadTransData(repository);
+
+    return BlocProvider(
+      create: (context) => TransferenciaBloc(loadTransData, repository),
+      child: const AddUserForm(),
+    );
   }
 }
 
@@ -18,8 +29,11 @@ class AddUserForm extends StatefulWidget {
 }
 
 class _AddUserFormState extends State<AddUserForm> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController cardNumberController = TextEditingController();
+  TextEditingController nicknameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController banknameController = TextEditingController();
+  TextEditingController accountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,40 +66,162 @@ class _AddUserFormState extends State<AddUserForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              // Nickname Field
               TextField(
-                controller: nameController,
+                controller: nicknameController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: const Color.fromARGB(255, 212, 205, 197),
-                  hintText: 'Nombre',
+                  hintText: 'Nickname',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
                 ),
-                style: const TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 66, 79, 120)),
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  color: Color.fromARGB(255, 66, 79, 120),
+                ),
               ),
               const SizedBox(height: 20.0),
+
+              // Email Field
               TextField(
-                controller: cardNumberController,
+                controller: emailController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 212, 205, 197),
+                  hintText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                ),
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  color: Color.fromARGB(255, 66, 79, 120),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+
+              // Phone Field
+              TextField(
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 212, 205, 197),
+                  hintText: 'Phone',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                ),
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  color: Color.fromARGB(255, 66, 79, 120),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+
+              // Bank Name Field
+              TextField(
+                controller: banknameController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 212, 205, 197),
+                  hintText: 'Bank Name',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                ),
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  color: Color.fromARGB(255, 66, 79, 120),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+
+              // Account Field
+              TextField(
+                controller: accountController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: const Color.fromARGB(255, 212, 205, 197),
-                  hintText: 'Número de Tarjeta',
+                  hintText: 'Account Number',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
                 ),
-                style: const TextStyle(fontSize: 20.0, color: Color.fromARGB(255, 66, 79, 120)),
+                style: const TextStyle(
+                  fontSize: 20.0,
+                  color: Color.fromARGB(255, 66, 79, 120),
+                ),
               ),
               const SizedBox(height: 25.0),
+
+              // Add Button
               ElevatedButton(
                 onPressed: () {
-                  print('Nombre: ${nameController.text}, Número de Tarjeta: ${cardNumberController.text}');
+                  // Validar campos antes de enviar el evento
+                  if (nicknameController.text.isEmpty ||
+                      emailController.text.isEmpty ||
+                      phoneController.text.isEmpty ||
+                      banknameController.text.isEmpty ||
+                      accountController.text.isEmpty) {
+                    // Muestra un mensaje de error si algún campo está vacío
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text('Todos los campos son obligatorios.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Aceptar'),
+                          ),
+                        ],
+                      ),
+                    );
+                    return;
+                  }
+
+                  // Envía el evento para agregar un nuevo contacto
+                  context.read<TransferenciaBloc>().add(
+                        AddTransferEvent(
+                          nickname: nicknameController.text,
+                          email: emailController.text,
+                          phone: phoneController.text,
+                          bankname: banknameController.text,
+                          account: accountController.text,
+                        ),
+                      );
+
+                  // Mostrar mensaje de éxito
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Éxito'),
+                      content: const Text('Usuario agregado correctamente.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const TransUser()));
+                          },
+                          child: const Text('Aceptar'),
+                        ),
+                      ],
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: const Color.fromARGB(255, 242, 244, 250),

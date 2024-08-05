@@ -9,7 +9,7 @@ class TransState extends Equatable {
   });
 
   TransState copyWith({
-    List<TransferModel>? transfers, required int id,
+    List<TransferModel>? transfers,
   }) {
     return TransState(
       transfers: transfers ?? this.transfers,
@@ -21,11 +21,19 @@ class TransState extends Equatable {
 
   factory TransState.fromModel(TransferModel model) {
     return TransState(
-      transfers: [model], // Aquí se usa una lista, pero puedes ajustar
+      transfers: [model],
     );
   }
 
   factory TransState.empty() {
     return const TransState(transfers: []);
   }
+}
+
+class TransStateError extends TransState {
+  final String message;
+  const TransStateError(this.message);
+
+  @override
+  List<Object> get props => [message];
 }
