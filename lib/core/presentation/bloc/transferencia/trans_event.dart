@@ -9,6 +9,17 @@ abstract class TransferEvent extends Equatable {
 
 class LoadTransferDataEvent extends TransferEvent {}
 
+class TransferenciaSuccess extends TransferEvent {}
+
+// Estado de error
+class TransferenciaError extends TransferEvent {
+  final String message;
+
+  const TransferenciaError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 class UserIdTransferChanged extends TransferEvent {
   final int idUser;
 

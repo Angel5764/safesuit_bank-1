@@ -209,15 +209,54 @@ class _AddUserFormState extends State<AddUserForm> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Éxito'),
-                      content: const Text('Usuario agregado correctamente.'),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      backgroundColor: Colors.white,
+                      title: Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.green),
+                          SizedBox(width: 10),
+                          Text(
+                            'Éxito',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                      content: Text(
+                        'Usuario agregado correctamente.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                        ),
+                      ),
                       actions: <Widget>[
                         TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.green,
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
                           onPressed: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => const TransUser()));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const TransUser()),
+                            );
                           },
-                          child: const Text('Aceptar'),
+                          child: Text(
+                            'Aceptar',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),

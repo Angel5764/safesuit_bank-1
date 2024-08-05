@@ -4,6 +4,7 @@ import 'package:safesuit_bank/core/presentation/bloc/mandaTransferencia/transfer
 import 'package:safesuit_bank/core/presentation/bloc/mandaTransferencia/transferencia_event.dart';
 import 'package:safesuit_bank/core/presentation/bloc/mandaTransferencia/transferencia_state.dart';
 import 'package:safesuit_bank/core/domain/usecases/load_transferir_data.dart';
+import 'package:safesuit_bank/core/presentation/screens/TransSelecionUser.dart';
 import 'package:safesuit_bank/data/repositories/transferencia_repository_impl.dart';
 
 class TransMont extends StatelessWidget {
@@ -82,18 +83,115 @@ class _TransferenciasPageState extends State<TransferenciasPage> {
       body: BlocConsumer<MandaTransferenciaBloc, MandaTransferenciaState>(
         listener: (context, state) {
           if (state is MandaTransferenciaSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Transferencia realizada con éxito'),
-                backgroundColor: Colors.green,
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.green),
+                    SizedBox(width: 10),
+                    Text(
+                      'Éxito',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
+                ),
+                content: Text(
+                  'Transferencia realizada exitosamente.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black87,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TransUser()),
+                      );
+                    },
+                    child: Text(
+                      'Aceptar',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
-            Navigator.pop(context);
           } else if (state is MandaTransferenciaError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    Icon(Icons.close, color: Colors.red),
+                    SizedBox(width: 10),
+                    Text(
+                      'Error',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+                content: Text(
+                  'Error al transferir',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black87,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TransUser()),
+                      );
+                    },
+                    child: Text(
+                      'Aceptar',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           }
