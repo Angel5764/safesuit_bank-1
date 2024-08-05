@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:safesuit_bank/core/domain/entities/movimientos.dart';
+import 'package:safesuit_bank/core/domain/models/movimientosModel.dart';
 import 'package:safesuit_bank/core/domain/usecases/load_movimientos_data.dart';
 import 'package:safesuit_bank/core/domain/repositories/movimientos_repository.dart';
 import 'package:safesuit_bank/core/presentation/bloc/movimientos/movimientos_bloc.dart';
@@ -28,7 +28,7 @@ class TransactionView extends StatelessWidget {
             color: Color.fromARGB(255, 242, 244, 250),
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 66, 79, 120),
+        backgroundColor: const Color.fromARGB(255, 66, 79, 120),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -44,23 +44,20 @@ class TransactionView extends StatelessWidget {
               return Center(
                 child: Text(
                   state.errorMessage,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               );
             }
 
             if (state.transactions.isEmpty) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             return ListView.builder(
               itemCount: state.transactions.length,
               itemBuilder: (context, index) {
                 final transaction = state.transactions[index];
-                return _buildTransactionSection(
-                  date: transaction.fecha,
-                  transactions: [transaction],
-                );
+                return _buildTransactionCard(transaction);
               },
             );
           },
@@ -69,40 +66,85 @@ class TransactionView extends StatelessWidget {
     );
   }
 
-  Widget _buildTransactionSection({required DateTime date, required List<TransactionEntity> transactions}) {
-    final formattedDate = DateFormat('yyyy-MM-dd').format(date);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            formattedDate,
-            style: TextStyle(
-              fontSize: 18,
+  Widget _buildTransactionCard(MovimientosModel transaction) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(
+            Icons.swap_horiz,
+            color: Colors.blueGrey[800],
+            size: 40.0,
+          ),
+          title: Text(
+            transaction.concept,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
+              fontSize: 16.0,
             ),
           ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Amount: \$${transaction.amount.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 14.0,
+                ),
+              ),
+              Text(
+                'From: ${transaction.senderAccount}',
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.grey,
+                ),
+              ),
+              Text(
+                'To: ${transaction.receptorAccount}',
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 16.0,
+                backgroundColor: Colors.blueGrey[100],
+                child: Text(
+                  transaction.owner[0],
+                  style: const TextStyle(
+                    color: Colors.blueGrey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  transaction.owner,
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
+          isThreeLine: true,
         ),
-        Column(
-          children: transactions.map((tx) => _buildTransactionCard(tx)).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTransactionCard(TransactionEntity tx) {
-    final formattedDate = DateFormat('yyyy-MM-dd').format(tx.fecha);
-
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      color: Color.fromRGBO(217, 217, 217, 1),
-      child: ListTile(
-        title: Text(tx.username),
-        subtitle: Text('Fecha: $formattedDate\nStatus: ${tx.status}'),
-        trailing: Text(tx.monto.toString()),
-        isThreeLine: true,
       ),
     );
   }

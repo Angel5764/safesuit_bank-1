@@ -1,13 +1,17 @@
 class TransactionEntity {
-  final String username;
-  final double monto;
-  final DateTime fecha;
-  final String status;
+  final int id;
+  final double amount;
+  final String senderAccount;
+  final String receptorAccount;
+  final String concept;
+  final String owner;
 
   TransactionEntity({
-    required this.username,
-    required this.monto,
-    required this.fecha,
-    required this.status,
+    required this.id,
+    required this.amount,
+    required this.senderAccount,
+    required this.receptorAccount,
+    required this.concept,
+    required this.owner,
   });
 }

@@ -1,43 +1,33 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:safesuit_bank/core/domain/usecases/load_movimientos_data.dart' as usecase;
-import 'movimientos_event.dart';
-import 'movimientos_state.dart';
+import 'package:safesuit_bank/core/domain/usecases/load_movimientos_data.dart';
+import 'package:safesuit_bank/core/domain/models/movimientosModel.dart';
+import 'package:safesuit_bank/core/presentation/bloc/movimientos/movimientos_event.dart';
+import 'package:safesuit_bank/core/presentation/bloc/movimientos/movimientos_state.dart';
 
 class MovimientosBloc extends Bloc<MovimientosEvent, MovimientosState> {
-  final usecase.LoadMovimientosData loadMovimientosData;
+  final LoadMovimientosData loadMovimientosData;
 
-  MovimientosBloc(this.loadMovimientosData) : super(MovimientosState()) {
-    on<LoadMovimientosDataEvent>((event, emit) async {
-      try {
-        final movimientosData = await loadMovimientosData();
-        emit(MovimientosState.fromModel(movimientosData));
-      } catch (error) {
-        emit(state.copyWith(errorMessage: error.toString()));
-      }
-    });
+  MovimientosBloc(this.loadMovimientosData) : super(MovimientosState.initial()) {
+    on<LoadMovimientosDataEvent>(_onLoadMovimientosData);
+  }
 
-    on<MovimientosUsernameChanged>((event, emit) {
+  Future<void> _onLoadMovimientosData(
+    LoadMovimientosDataEvent event,
+    Emitter<MovimientosState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true, errorMessage: ''));
+
+    try {
+      final transactions = await loadMovimientosData.call();
       emit(state.copyWith(
-        username: event.username,
+        isLoading: false,
+        transactions: transactions,
       ));
-    });
-
-    on<MovimientosMontoChanged>((event, emit) {
+    } catch (error) {
       emit(state.copyWith(
-        monto: event.monto,
+        isLoading: false,
+        errorMessage: 'Failed to load transactions: ${error.toString()}',
       ));
-    });
-
-    on<MovimientosFechaChanged>((event, emit) {
-      emit(state.copyWith(
-        fecha: event.fecha,
-      ));
-    });
-
-    on<MovimientosStatusChanged>((event, emit) {
-      emit(state.copyWith(
-        status: event.status,
-      ));
-    });
+    }
   }
 }

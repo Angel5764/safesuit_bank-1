@@ -8,16 +8,20 @@ part of 'movimientosModel.dart';
 
 MovimientosModel _$MovimientosModelFromJson(Map<String, dynamic> json) =>
     MovimientosModel(
-      username: json['username'] as String,
-      monto: (json['monto'] as num).toDouble(),
-      fecha: DateTime.parse(json['fecha'] as String),
-      status: json['status'] as String,
+      id: (json['id'] as num).toInt(),
+      amount: (json['amount'] as num).toDouble(),
+      senderAccount: json['senderAccount'] as String,
+      receptorAccount: json['receptorAccount'] as String,
+      concept: json['concept'] as String,
+      owner: json['owner'] as String,
     );
 
 Map<String, dynamic> _$MovimientosModelToJson(MovimientosModel instance) =>
     <String, dynamic>{
-      'username': instance.username,
-      'monto': instance.monto,
-      'fecha': instance.fecha.toIso8601String(),
-      'status': instance.status,
+      'id': instance.id,
+      'amount': instance.amount,
+      'senderAccount': instance.senderAccount,
+      'receptorAccount': instance.receptorAccount,
+      'concept': instance.concept,
+      'owner': instance.owner,
     };
