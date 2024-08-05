@@ -1,27 +1,23 @@
-// pagaraguakan_bloc.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:safesuit_bank/core/domain/usecases/load_pagartelcel_repository.dart' as usecase;
+import 'package:safesuit_bank/core/domain/repositories/pagartelcel_repository.dart';
 import 'package:safesuit_bank/core/presentation/bloc/pagos/telcel/pagartelcel_event.dart';
 import 'package:safesuit_bank/core/presentation/bloc/pagos/telcel/pagartelcel_state.dart';
 
 class PagartelcelBloc extends Bloc<PagartelcelEvent, PagartelcelState> {
-  final usecase.LoadPagartelcelData loadPagartecelData;
+  final PagartelcelRepository pagartelcelRepository;
 
-  PagartelcelBloc(this.loadPagartecelData) : super(const PagartelcelState()) {
-    on<LoadPagartelcelDataEvent>((event, emit) async {
-      try {
-        final pagartelcelData = await loadPagartecelData();
-        emit(PagartelcelState.fromModel(pagartelcelData));
-      } catch (error) {
-        emit(state.copyWith(errorMessage: error.toString()));
-      }
-    });
+  PagartelcelBloc({required this.pagartelcelRepository})
+      : super(PagartelcelInitial()) {
+    on<LoginButtonPressed>(_onLoginButtonPressed);
+  }
 
-    on<ImporteChanged>((event, emit) {
-      emit(state.copyWith(
-        Importe: event.importe, errorMessage: '',
-      ));
-    });
+  Future<void> _onLoginButtonPressed(
+      LoginButtonPressed event, Emitter<PagartelcelState> emit) async {
+    emit(PagartelcelILoading());
+      final pagar = await pagartelcelRepository.loadFormData(
+        NoTelcel: event.NoTelcel,
+        Importe: event.importe,
+      );
+      emit(PagartelcelAuthenticated(pagar: pagar));
   }
 }
-  

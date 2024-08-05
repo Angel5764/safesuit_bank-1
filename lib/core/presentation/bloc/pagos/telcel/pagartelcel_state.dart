@@ -1,37 +1,42 @@
-// pagaraguakan_state.dart
 import 'package:equatable/equatable.dart';
 import 'package:safesuit_bank/core/domain/models/pagartelcelModel.dart';
 
-class PagartelcelState extends Equatable {
-  final String NoTelcel;
-  final double Importe;
-  final String errorMessage;
+abstract class PagartelcelState extends Equatable {
+  const PagartelcelState();
 
-  const PagartelcelState({
-    this.NoTelcel = '',
-    this.Importe = 0.0,
-    this.errorMessage = '',
-  });
+  @override
+  List<Object> get props => [];
+}
 
-  factory PagartelcelState.fromModel(pagartelcelModel model) {
-    return PagartelcelState(
-      NoTelcel: model.NoTelcel,
-      Importe: model.Importe,
-    );
-  }
+class PagartelcelInitial extends PagartelcelState {}
 
-  PagartelcelState copyWith({
-    String? NoTelcel,
-    double? Importe,
-    String? errorMessage,
+class PagartelcelILoading extends PagartelcelState {}
+
+class PagartelcelAuthenticated extends PagartelcelState {
+  final pagartelcelModel pagar;
+  final bool bamdera;
+
+  const PagartelcelAuthenticated({required this.pagar, this.bamdera = false});
+
+  PagartelcelAuthenticated copyWith({
+    pagartelcelModel? pagar,
+    bool? bandera,
   }) {
-    return PagartelcelState(
-      NoTelcel: NoTelcel ?? this.NoTelcel,
-      Importe: Importe ?? this.Importe,
-      errorMessage: errorMessage ?? this.errorMessage,
+    return PagartelcelAuthenticated(
+      pagar: pagar ?? this.pagar,
+      bamdera: bandera ?? this.bamdera,
     );
   }
 
   @override
-  List<Object> get props => [NoTelcel, Importe, errorMessage];
+  List<Object> get props => [pagar, bamdera];
+}
+
+class PagartelcelAuthenticationFailure extends PagartelcelState {
+  final String error;
+
+  const PagartelcelAuthenticationFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
 }

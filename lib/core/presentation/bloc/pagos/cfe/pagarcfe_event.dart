@@ -1,5 +1,6 @@
 // pagaraguakan_event.dart
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class PagarcfeEvent extends Equatable {
   const PagarcfeEvent();
@@ -8,12 +9,16 @@ abstract class PagarcfeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPagarcfeDataEvent extends PagarcfeEvent {}
-
-class ImporteChanged extends PagarcfeEvent {
+class LoginButtonPressed extends PagarcfeEvent {
+  final String Numservices;
   final double importe;
+  final BuildContext context;
+  
+  const LoginButtonPressed({
+    required this.Numservices,
+    required this.importe,
+    required this.context,
+  });
 
-  const ImporteChanged(this.importe);
-  @override
-  List<Object> get props => [importe];
+  List<Object> get props => [Numservices, importe, context];
 }

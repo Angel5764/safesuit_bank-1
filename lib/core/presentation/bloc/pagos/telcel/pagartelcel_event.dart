@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+
 
 abstract class PagartelcelEvent extends Equatable {
   const PagartelcelEvent();
@@ -7,12 +9,16 @@ abstract class PagartelcelEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadPagartelcelDataEvent extends PagartelcelEvent {}
-
-class ImporteChanged extends PagartelcelEvent {
+class LoginButtonPressed extends PagartelcelEvent {
+  final String NoTelcel;
   final double importe;
+  final BuildContext context;
+  
+  const LoginButtonPressed({
+    required this.NoTelcel,
+    required this.importe,
+    required this.context,
+  });
 
-  const ImporteChanged(this.importe);
-  @override
-  List<Object> get props => [importe];
+  List<Object> get props => [NoTelcel, importe, context];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart'; // Import necesario para TextInputFormatter
 import 'package:safesuit_bank/core/domain/usecases/load_pagaraguakan_repository.dart';
 import 'package:safesuit_bank/core/presentation/bloc/pagos/aguakan/pagaraguakan_bloc.dart';
 import 'package:safesuit_bank/core/presentation/bloc/pagos/aguakan/pagaraguakan_event.dart';
@@ -18,12 +19,48 @@ class TransAgua extends StatefulWidget {
 class _TransAguaState extends State<TransAgua> {
   final TextEditingController NIAController = TextEditingController();
   final TextEditingController ImporteController = TextEditingController();
+  String? niaError;
+  String? importeError;
+
+  @override
+  void initState() {
+    super.initState();
+    NIAController.addListener(() {
+      final NIAvalidacion = LoadPagaraguakanData().esNIAValido(NIAController.text);
+      setState(() {
+        niaError = NIAvalidacion ? null : 'NIA inválido deben tener 12 números.';
+      });
+    });
+    ImporteController.addListener(() {
+      final esValido = LoadPagaraguakanData().esDouble(ImporteController.text);
+      double? importe = double.tryParse(ImporteController.text);
+      final rangoimporte = importe != null && importe > 200 && importe <= 10000;
+
+      setState(() {
+        if (!esValido) {
+          importeError = 'Solo usar números y un punto decimal.';
+        } else if (!rangoimporte) {
+          importeError = 'Importe mínimo 200, máximo 10000.';
+        } else {
+          importeError = null;
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    NIAController.dispose();
+    ImporteController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PagaraguakanBloc(pagaraguakanRepository: PagaraguakanRepositoryImpl()),
-      child: BlocListener<PagaraguakanBloc, PagaraguakanState>(
+      create: (context) => PagarcfeBloc(
+          pagaraguakanRepository: PagaraguakanRepositoryImpl()),
+      child: BlocListener<PagarcfeBloc, PagaraguakanState>(
         listener: (context, state) {
           if (state is PagaraguakanAuthenticated) {
             Navigator.pushReplacement(
@@ -36,12 +73,11 @@ class _TransAguaState extends State<TransAgua> {
             );
           }
         },
-        child: BlocBuilder<PagaraguakanBloc, PagaraguakanState>(
+        child: BlocBuilder<PagarcfeBloc, PagaraguakanState>(
           builder: (context, state) {
             if (kDebugMode) {
               print(state.toString());
             }
-
             return Scaffold(
               appBar: AppBar(
                 title: const Text(
@@ -84,54 +120,111 @@ class _TransAguaState extends State<TransAgua> {
                         const SizedBox(height: 25.0),
                         SizedBox(
                           width: 300,
-                          height: 50,
-                          child: TextField(
-                            controller: NIAController,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: const Color.fromARGB(255, 205, 205, 205),
-                              hintText: 'Ingresar NIA',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none,
+                          height: 70, // Altura fija para el contenedor
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 50, // Altura fija para el TextField
+                                child: TextField(
+                                  controller: NIAController,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(255, 205, 205, 205),
+                                    hintText: 'Ingresar NIA',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                  ),
+                                  inputFormatters: [LengthLimitingTextInputFormatter(12)], // Limitar a 12 caracteres
+                                ),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            ),
+                              if (niaError != null)
+                                Text(
+                                  niaError!,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 25.0),
                         SizedBox(
                           width: 300,
-                          height: 50,
-                          child: TextField(
-                            controller: ImporteController,
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: const Color.fromARGB(255, 205, 205, 205),
-                              hintText: 'Importe',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide.none,
+                          height: 70, // Altura fija para el contenedor
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 50, // Altura fija para el TextField
+                                child: TextField(
+                                  controller: ImporteController,
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: const Color.fromARGB(255, 205, 205, 205),
+                                    hintText: 'Importe',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                  ),
+                                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(7), // Limitar a 7 caracteres
+                                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')), // Permitir solo números y un punto
+                                  ],
+                                ),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            ),
+                              if (importeError != null)
+                                Text(
+                                  importeError!,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 25.0),
                         ElevatedButton(
                           onPressed: () {
-                            if (LoadPagaraguakanData().esNIAValido(NIAController.text) &&
-                                LoadPagaraguakanData().esDouble(double.tryParse(ImporteController.text) ?? 0.0)) {
-                              context.read<PagaraguakanBloc>().add(
-                                LoginButtonPressed(
-                                  NIA: NIAController.text,
-                                  importe: double.parse(ImporteController.text),
-                                  context: context,
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('NIA o Importe inválido')),
+                            if (niaError == null && importeError == null) {
+                              String nia = NIAController.text;
+                              double importe = double.parse(ImporteController.text);
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext dialogContext) {
+                                  return AlertDialog(
+                                    title: const Text('Confirmación'),
+                                    content: Text(
+                                        '¿Está seguro de que desea realizar el pago de $importe para el NIA $nia?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(dialogContext).pop(); // Cierra el diálogo
+                                        },
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(dialogContext).pop();
+                                          BlocProvider.of<PagarcfeBloc>(context).add(
+                                            LoginButtonPressed(
+                                              NIA: nia,
+                                              importe: importe,
+                                              context: context,
+                                            ),
+                                          );
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const HomeView()),
+                                          );
+                                        },
+                                        child: const Text('Aceptar'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             }
                           },

@@ -1,37 +1,42 @@
-// pagaraguakan_state.dart
 import 'package:equatable/equatable.dart';
 import 'package:safesuit_bank/core/domain/models/pagarcfeModel.dart';
 
-class PagarcfeState extends Equatable {
-  final String Numservices;
-  final double Importe;
-  final String errorMessage;
+abstract class PagarcfeState extends Equatable {
+  const PagarcfeState();
 
-  const PagarcfeState({
-    this.Numservices = '',
-    this.Importe = 0.0,
-    this.errorMessage = '',
-  });
+  @override
+  List<Object> get props => [];
+}
 
-  factory PagarcfeState.fromModel(pagarcfeModel model) {
-    return PagarcfeState(
-      Numservices: model.Numservices,
-      Importe: model.Importe,
-    );
-  }
+class PagarcfeInitial extends PagarcfeState {}
 
-  PagarcfeState copyWith({
-    String? Numservices,
-    double? Importe,
-    String? errorMessage,
+class PagarcfeILoading extends PagarcfeState {}
+
+class PagarcfeAuthenticated extends PagarcfeState {
+  final pagarcfeModel pagar;
+  final bool bamdera;
+
+  const PagarcfeAuthenticated({required this.pagar, this.bamdera = false});
+
+  PagarcfeAuthenticated copyWith({
+    pagarcfeModel? pagar,
+    bool? bandera,
   }) {
-    return PagarcfeState(
-      Numservices: Numservices ?? this.Numservices,
-      Importe: Importe ?? this.Importe,
-      errorMessage: errorMessage ?? this.errorMessage,
+    return PagarcfeAuthenticated(
+      pagar: pagar ?? this.pagar,
+      bamdera: bandera ?? this.bamdera,
     );
   }
 
   @override
-  List<Object> get props => [Numservices, Importe, errorMessage];
+  List<Object> get props => [pagar, bamdera];
+}
+
+class PagarcfeAuthenticationFailure extends PagarcfeState {
+  final String error;
+
+  const PagarcfeAuthenticationFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
 }

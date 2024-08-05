@@ -1,19 +1,21 @@
-// load_pagaraguakan_repository.dart
 import 'package:safesuit_bank/core/domain/models/pagaraguakanModel.dart';
 import 'package:safesuit_bank/core/domain/repositories/pagaraguakan_repository.dart';
 
 class LoadPagaraguakanData {
-
   Future<pagaraguakanModel> call() async {
-    final pagarAguakanData = pagaraguakanModel(NIA: '232312321219', Importe: 500);
+    final pagarAguakanData =
+        pagaraguakanModel(NIA: '232312321219', Importe: 500);
     // Validaciones
     if (pagarAguakanData.NIA.isEmpty || !esNIAValido(pagarAguakanData.NIA)) {
       throw Exception("NIA está vacío o no es válido");
     }
-    if (!esDouble(pagarAguakanData.Importe) || pagarAguakanData.Importe <= 200) {
-      throw Exception("El importe debe ser un número positivo mayor a 200");
+    if (pagarAguakanData.Importe <= 200) {
+      throw Exception(
+          "El importe debe ser un número positivo mayor a 200 y no puede iniciar con 0");
     }
-
+    if (pagarAguakanData.Importe > 10000) {
+      throw Exception("El importe no debe exceder los 10,000");
+    }
     return pagarAguakanData;
   }
 
@@ -22,8 +24,11 @@ class LoadPagaraguakanData {
     return niaExp.hasMatch(nia);
   }
 
-  bool esDouble(double value) {
+  bool esDouble(String value) {
     final decimalRegex = RegExp(r'^\d+(\.\d{1,2})?$');
-    return decimalRegex.hasMatch(value.toString());
+    if (value.startsWith('0') && value != '0' && !value.startsWith('0.')) {
+      return false;
+    }
+    return decimalRegex.hasMatch(value);
   }
 }
