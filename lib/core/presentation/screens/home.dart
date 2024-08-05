@@ -118,7 +118,7 @@ class _HomeViewContentState extends State<HomeViewContent> {
               ),
               ListTile(
                   leading: const Icon(Icons.arrow_forward),
-                  title: const Text('Transferencias'),
+                  title: const Text('Transferir dinero'),
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => const TransUser()));
@@ -130,10 +130,6 @@ class _HomeViewContentState extends State<HomeViewContent> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => TransactionView()));
                   }),
-              const ListTile(
-                leading: Icon(Icons.credit_card),
-                title: Text('Tarjeta'),
-              ),
               ListTile(
                 leading: const Icon(Icons.exit_to_app),
                 title: const Text('Cerrar Sesión'),

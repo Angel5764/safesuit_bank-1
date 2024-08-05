@@ -7,7 +7,7 @@ import 'trans_state.dart';
 
 class TransferenciaBloc extends Bloc<TransferEvent, TransState> {
   final usecase.LoadTransData loadTransData;
-  final TransferRepositoryImpl repository; // Update to use implementation for adding
+  final TransferRepositoryImpl repository;
 
   TransferenciaBloc(this.loadTransData, this.repository) : super(const TransState()) {
     on<LoadTransferDataEvent>(
@@ -35,7 +35,7 @@ class TransferenciaBloc extends Bloc<TransferEvent, TransState> {
             event.bankname,
             event.account,
           );
-          final List<TransferModel> updatedTransfers = await loadTransData(); // Reload data
+          final List<TransferModel> updatedTransfers = await loadTransData();
           emit(TransState(transfers: updatedTransfers));
         } catch (e) {
           emit(TransStateError('Error adding contact: $e'));

@@ -23,7 +23,22 @@ class ApiService {
       throw Exception('Failed to load user profile');
     }
   }
-
+  Future<Map<String, dynamic>> getCardProfile(String token) async {
+    try {
+      final response = await _dio.get(
+        '/accounts/me',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      return response.data;
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to load user profile');
+    }
+  }
   Future<void> updateUserProfile(String token, Map<String, dynamic> data) async {
     try {
       await _dio.patch(

@@ -112,7 +112,11 @@ class _TransferenciasPageState extends State<TransferenciasPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const TransMont(), // Asegúrate de pasar cualquier dato necesario
+                                builder: (context) => TransMont(
+                                  receptorNickname: transfer.nickname,
+                                  receptorAccount: int.parse(transfer.account), // Parse account to int
+                                  bankName: transfer.bankname,
+                                ), // Asegúrate de pasar cualquier dato necesario
                               ),
                             );
                           },

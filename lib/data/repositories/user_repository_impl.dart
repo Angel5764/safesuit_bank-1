@@ -37,6 +37,15 @@ class UserRepositoryImpl implements UserRepository {
           // Obtener el perfil del usuario usando el token
           final userData = await _apiService.getUserProfile(token);
           print("Datos del usuario: $userData");
+          
+          // Obtener la card para las transferencias
+          final userData2 = await _apiService.getCardProfile(token);
+          print("Datos de la tarjeta: $userData2");
+
+          // Guardar el card_account en SharedPreferences
+          final cardAccount = userData2['data']['card'][0]['card_account'];
+          await prefs.setString('card_account', cardAccount);
+          print("Card Account guardado: $cardAccount");
 
           return UserModel.fromJson(userData['data']); // Ajuste para extraer solo 'data'
         } else {
@@ -53,26 +62,6 @@ class UserRepositoryImpl implements UserRepository {
     } catch (e) {
       print("Error durante la autenticación: $e");
       throw Exception('Error en la autenticación: $e');
-    }
-  }
-
-  @override
-  Future<UserModel?> getUserProfile() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('auth_token');
-
-      if (token != null && token.isNotEmpty) {
-        final userData = await _apiService.getUserProfile(token);
-        print("Datos del usuario: $userData");
-
-        return UserModel.fromJson(userData['data']); // Asegúrate de extraer los datos de 'data'
-      } else {
-        throw Exception('Token no disponible');
-      }
-    } catch (e) {
-      print("Error al cargar el perfil del usuario: $e");
-      throw Exception('Error al cargar el perfil del usuario: $e');
     }
   }
 
