@@ -177,7 +177,7 @@ class _TransferenciasPageState extends State<TransferenciasPage> {
                             receptorAccount: widget.receptorAccount,
                             amount: amount,
                             concept: concept,
-                            owner: 'OwnerName', // Reemplaza por el nombre del dueño real
+                            owner: widget.receptorNickname, // Reemplaza por el nombre del dueño real
                           ),
                         );
                   },

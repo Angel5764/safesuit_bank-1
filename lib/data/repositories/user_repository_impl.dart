@@ -43,7 +43,7 @@ class UserRepositoryImpl implements UserRepository {
           print("Datos de la tarjeta: $userData2");
 
           // Guardar el card_account en SharedPreferences
-          final cardAccount = userData2['data']['card'][0]['card_account'];
+          final cardAccount = userData2['data']['card'][0]['card'];
           await prefs.setString('card_account', cardAccount);
           print("Card Account guardado: $cardAccount");
 

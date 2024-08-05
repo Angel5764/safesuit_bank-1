@@ -11,6 +11,7 @@ class MandaTransferenciaBloc extends Bloc<MandaTransferenciaEvent, MandaTransfer
     on<AgregarTransferenciaEvent>((event, emit) async {
       emit(MandaTransferenciaLoading());
       try {
+        // Llamada al caso de uso para cargar datos
         final transfer = await loadTransData(
           receptorAccount: event.receptorAccount,
           amount: event.amount,
@@ -19,7 +20,9 @@ class MandaTransferenciaBloc extends Bloc<MandaTransferenciaEvent, MandaTransfer
         );
 
         emit(MandaTransferenciaSuccess(transfer));
-      } catch (e) {
+      } catch (e, stacktrace) {
+        print('Error al agregar la transferencia: $e');
+        print('Detalles del error: $stacktrace');
         emit(MandaTransferenciaError('Error al agregar la transferencia: $e'));
       }
     });

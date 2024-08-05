@@ -4,14 +4,12 @@ part 'transferirModel.g.dart';
 
 @JsonSerializable()
 class transferirModel{
-  final int user_account;
-  final int receptor_account;
+  final int? receptor_account;
   final int amount;
   final String concept;
   final String owner;
 
   transferirModel ({
-    required this.user_account,
     required this.receptor_account,
     required this.amount,
     required this.concept,
