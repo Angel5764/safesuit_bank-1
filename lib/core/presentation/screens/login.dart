@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     bool authenticated = false;
     try {
       authenticated = await _localAuthentication.authenticate(
-        localizedReason: "Autenticate para acceder",
+        localizedReason: "Autentíquese para acceder",
         options: const AuthenticationOptions(stickyAuth: true, useErrorDialogs: true),
       );
     } catch (e) {
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     } else {
       if (kDebugMode) {
-        print("fallo auth");
+        print("Fallo de autenticación");
       }
     }
   }
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     final phone = _phoneController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (LoadUserData.validatePhoneNumber(phone) && LoadUserData.validatePassword(password)) {
+    if (_validatePhoneNumber(phone) && _validatePassword(password)) {
       // Emite el evento de inicio de sesión al BLoC
       BlocProvider.of<UserBloc>(context).add(
         LoginButtonPressed(
@@ -66,6 +66,30 @@ class _LoginPageState extends State<LoginPage> {
         const SnackBar(content: Text('Número de teléfono o contraseña inválidos')),
       );
     }
+  }
+
+  bool _validatePhoneNumber(String phoneNumber) {
+    // Valida que el número de teléfono tenga 10 dígitos
+    final RegExp phoneExp = RegExp(r'^\d{10}$');
+    if (!phoneExp.hasMatch(phoneNumber)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Número de teléfono debe tener 10 dígitos')),
+      );
+      return false;
+    }
+    return true;
+  }
+
+  bool _validatePassword(String password) {
+    // Longitud mínima de 8 caracteres, al menos una letra y un número
+    final RegExp passwordExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+    if (!passwordExp.hasMatch(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La contraseña debe tener al menos 8 caracteres, una letra y un número')),
+      );
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -115,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                   fit: BoxFit.contain,
                 ),
                 TextField(
-                  decoration: const InputDecoration(hintText: "Numero de telefono"),
+                  decoration: const InputDecoration(hintText: "Número de teléfono"),
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
                 ),
@@ -135,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                       checkColor: Colors.black,
                       fillColor: MaterialStateProperty.all(Colors.white),
                     ),
-                    const Text("Mantener sesion activa"),
+                    const Text("Mantener sesión activa"),
                   ],
                 ),
                 ElevatedButton(
@@ -169,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                     backgroundColor: MaterialStateProperty.all(Colors.blueGrey),
                   ),
                   child: const Text(
-                    "registrarse",
+                    "Registrarse",
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

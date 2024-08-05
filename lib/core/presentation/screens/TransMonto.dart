@@ -52,7 +52,7 @@ class TransferenciasPage extends StatefulWidget {
 
 class _TransferenciasPageState extends State<TransferenciasPage> {
   final TextEditingController cantidadController =
-      TextEditingController(text: '\$0.00');
+      TextEditingController(text: '\$0');
   final TextEditingController conceptoController = TextEditingController();
   String cantidad = '';
 
@@ -237,12 +237,16 @@ class _TransferenciasPageState extends State<TransferenciasPage> {
                 SizedBox(
                   width: 300,
                   height: 50,
+                  
                   child: TextField(
                     controller: conceptoController,
+                    maxLength: 20,
+                    
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color.fromARGB(255, 212, 205, 197),
                       hintText: 'Concepto',
+                      
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide.none),
